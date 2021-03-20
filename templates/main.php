@@ -84,7 +84,7 @@
         </div>
     </div>
     <div class="popular__posts">
-        <?php foreach ($data as $post): ?>
+        <?php foreach ($posts as $post): ?>
         <article class="popular__post post <?=htmlspecialchars($post['type']); ?>">
             <header class="post__header">
                 <h2><?=htmlspecialchars($post['title']); ?></h2>
@@ -101,7 +101,7 @@
                                     <h3><?=htmlspecialchars($post['title']); ?></h3>
                                 </div>
                             </div>
-                            <span><?=(htmlspecialchars($post['content'])); ?></span>
+                            <span><?=htmlspecialchars($post['content']); ?></span>
                         </a>
                     </div>
                 <?php endif; ?>

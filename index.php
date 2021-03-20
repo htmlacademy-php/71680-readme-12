@@ -2,42 +2,41 @@
 $is_auth = rand(0, 1);
 $user_name = 'Александр';
 $posts = [
-    'posts' =>
-        [
-            'title' => 'Цитата',
-            'type' => 'post-quote',
-            'content' => 'Мы в жизни любим только раз, а после ищем лишь похожих',
-            'user_name' => 'Лариса',
-            'avatar' => 'userpic-larisa-small.jpg'
-        ],
-        [
-            'title' => 'Игра престолов',
-            'type' => 'post-text',
-            'content' => 'Действие «Игры престолов» происходит в вымышленном мире, напоминающем средневековую Европу. В сериале одновременно действует множество персонажей и развивается несколько сюжетных линий. Основных сюжетных арок три: первая посвящена борьбе нескольких влиятельных домов за Железный Трон Семи Королевств либо за независимость от него; вторая — потомку свергнутой династии правителей, принцессе-изгнаннице, планирующей вернуть престол; третья — древнему братству, охраняющему государство от угроз с севера.',
-            'user_name' => 'Владик',
-            'avatar' => 'userpic.jpg'
-        ],
-        [
-            'title' => 'Наконец, обработал фотки!',
-            'type' => 'post-photo',
-            'content' => 'rock-medium.jpg',
-            'user_name' => 'Виктор',
-            'avatar' => 'userpic-mark.jpg'
-        ],
-        [
-            'title' => 'Моя мечта',
-            'type' => 'post-photo',
-            'content' => 'coast-medium.jpg',
-            'user_name' => 'Лариса',
-            'avatar' => 'userpic-larisa-small.jpg'
-        ],
-        [
-            'title' => 'Лучшие курсы',
-            'type' => 'post-link',
-            'content' => 'www.htmlacademy.ru',
-            'user_name' => 'Владик',
-            'avatar' => 'userpic.jpg'
-        ],
+    [
+        'title' => 'Цитата',
+        'type' => 'post-quote',
+        'content' => 'Мы в жизни любим только раз, а после ищем лишь похожих',
+        'user_name' => 'Лариса',
+        'avatar' => 'userpic-larisa-small.jpg'
+    ],
+    [
+        'title' => 'Игра престолов',
+        'type' => 'post-text',
+        'content' => 'Действие «Игры престолов» происходит в вымышленном мире, напоминающем средневековую Европу. В сериале одновременно действует множество персонажей и развивается несколько сюжетных линий. Основных сюжетных арок три: первая посвящена борьбе нескольких влиятельных домов за Железный Трон Семи Королевств либо за независимость от него; вторая — потомку свергнутой династии правителей, принцессе-изгнаннице, планирующей вернуть престол; третья — древнему братству, охраняющему государство от угроз с севера.',
+        'user_name' => 'Владик',
+        'avatar' => 'userpic.jpg'
+    ],
+    [
+        'title' => 'Наконец, обработал фотки!',
+        'type' => 'post-photo',
+        'content' => 'rock-medium.jpg',
+        'user_name' => 'Виктор',
+        'avatar' => 'userpic-mark.jpg'
+    ],
+    [
+        'title' => 'Моя мечта',
+        'type' => 'post-photo',
+        'content' => 'coast-medium.jpg',
+        'user_name' => 'Лариса',
+        'avatar' => 'userpic-larisa-small.jpg'
+    ],
+    [
+        'title' => 'Лучшие курсы',
+        'type' => 'post-link',
+        'content' => 'www.htmlacademy.ru',
+        'user_name' => 'Владик',
+        'avatar' => 'userpic.jpg'
+    ],
 ];
 
 /**
@@ -70,7 +69,7 @@ function crop_text($text, $limit = 300)
 
 require('helpers.php');
 
-$content = include_template('main.php', $posts);
+$content = include_template('main.php', ['posts' => $posts]);
 $data = [
     'content' => $content,
     'user_name' => $user_name,
