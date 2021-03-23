@@ -85,9 +85,9 @@
     </div>
     <div class="popular__posts">
         <?php foreach ($posts as $post): ?>
-        <article class="popular__post post <?=htmlspecialchars($post['type']); ?>">
+        <article class="popular__post post <?=$post['type']; ?>">
             <header class="post__header">
-                <h2><?=htmlspecialchars($post['title']); ?></h2>
+                <h2><?=$post['title']; ?></h2>
             </header>
             <div class="post__main">
                 <?php if ($post['type'] === 'post-link') :?>
@@ -98,10 +98,10 @@
                                     <img src="https://www.google.com/s2/favicons?domain=vitadental.ru" alt="Иконка">
                                 </div>
                                 <div class="post-link__info">
-                                    <h3><?=htmlspecialchars($post['title']); ?></h3>
+                                    <h3><?=$post['title']; ?></h3>
                                 </div>
                             </div>
-                            <span><?=htmlspecialchars($post['content']); ?></span>
+                            <span><?=$post['content']; ?></span>
                         </a>
                     </div>
                 <?php endif; ?>
@@ -109,7 +109,7 @@
                 <?php if ($post['type'] === 'post-quote') :?>
                     <blockquote>
                         <p>
-                            <?=htmlspecialchars($post['content']); ?>
+                            <?=$post['content']; ?>
                         </p>
                         <cite>Неизвестный Автор</cite>
                     </blockquote>
@@ -117,12 +117,12 @@
 
                 <?php if ($post['type'] === 'post-photo') :?>
                     <div class="post-photo__image-wrapper">
-                        <img src="img/<?=htmlspecialchars($post['content']); ?>" alt="Фото от пользователя" width="360" height="240">
+                        <img src="img/<?=$post['content']; ?>" alt="Фото от пользователя" width="360" height="240">
                     </div>
                 <?php endif; ?>
 
                 <?php if ($post['type'] === 'post-text') :?>
-                    <?=crop_text($post['content']); ?>
+                    <?=$post['content']; ?>
                 <?php endif; ?>
             </div>
             <footer class="post__footer">
@@ -130,10 +130,10 @@
                     <a class="post__author-link" href="#" title="Автор">
                         <div class="post__avatar-wrapper">
                             <!--укажите путь к файлу аватара-->
-                            <img class="post__author-avatar" src="img/<?=htmlspecialchars($post['avatar']); ?>" alt="Аватар пользователя">
+                            <img class="post__author-avatar" src="img/<?=$post['avatar']; ?>" alt="Аватар пользователя">
                         </div>
                         <div class="post__info">
-                            <b class="post__author-name"><?=htmlspecialchars($post['user_name']); ?></b>
+                            <b class="post__author-name"><?=$post['user_name']; ?></b>
                             <time class="post__time" datetime="">дата</time>
                         </div>
                     </a>

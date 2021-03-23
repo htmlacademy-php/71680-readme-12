@@ -45,7 +45,7 @@ $posts = [
  * @param integer $limit Максимальное количество символов
  * @return string Итоговый текст
  */
-function crop_text($text, $limit = 300)
+function cropText($text, $limit = 300)
 {
     if (strlen(utf8_decode($text)) <= $limit) {
         return '<p>'.htmlspecialchars($text).'</p>';
@@ -67,12 +67,42 @@ function crop_text($text, $limit = 300)
     return '<p>'.htmlspecialchars($crop_text).'...'.'</p>'.$read_more_link;
 }
 
+/**
+ * Подготавливает данные перед выводом в шаблон
+ * @param array $data Двумерный массив
+ * @return array Подготовленый массив
+ */
+function prepearingData($data)
+{
+    $arrays = $data;
+    foreach ($arrays as &$array) {
+        if (is_array($array)) {
+            if ($array['type'] === 'post-text') {
+                foreach ($array as $key => &$value) {
+                    if ($key === 'content') {
+                        $value = cropText($value);
+                        continue;
+                    }
+                    $value = htmlspecialchars($value);
+                }
+            } else {
+                foreach ($array as &$value) {
+                    $value = htmlspecialchars($value);
+                }
+            }
+        }
+    }
+    return $arrays;
+}
+
+$safe_data = prepearingData($posts);
+
 require('helpers.php');
 
-$content = include_template('main.php', ['posts' => $posts]);
+$content = include_template('main.php', ['posts' => $safe_data]);
 $data = [
     'content' => $content,
-    'user_name' => $user_name,
+    'user_name' => htmlspecialchars($user_name),
     'is_auth' => $is_auth,
     'page_name' => 'readme',
 ];
