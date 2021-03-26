@@ -48,11 +48,10 @@ $posts = [
 function cropText($text, $limit = 300)
 {
     if (strlen(utf8_decode($text)) <= $limit) {
-        return '<p>'.htmlspecialchars($text).'</p>';
+        return $text;
     }
 
     $words = explode(' ', $text);
-    $read_more_link = '<a class="post-text__more-link" href="#">Читать далее</a>';
     $crop_text= '';
     $space_after_word = 1;
     $length = 0;
@@ -64,38 +63,57 @@ function cropText($text, $limit = 300)
             break;
         }
     }
-    return '<p>'.htmlspecialchars($crop_text).'...'.'</p>'.$read_more_link;
+    return $crop_text.'...';
 }
 
 /**
- * Подготавливает данные перед выводом в шаблон
+ * Укорачивает текст в посте
+ * @param array $post Массив с постом
+ * @return array Массив с укороченным текстом
+ */
+function getShortenPostText($post) {
+    if ($post['type'] !== 'post-text') {
+        return $post;
+    }
+    $post['short_text'] = cropText($post['content']);
+
+    if ($post['short_text'] === $post['content']) {
+        unset($post['short_text']);
+    }
+    return $post;
+}
+
+/**
+ * Подготавливает один пост перед выводом в шаблон
+ * @param array $post Ассоциативный массив
+ * @return array Подготовленый массив
+ */
+function prepearingPost($post)
+{
+    $prepearing_post = Array();
+    foreach ($post as $key => $value) {
+        $prepearing_post[$key] = htmlspecialchars($value);
+    }
+    return getShortenPostText($prepearing_post);
+}
+
+/**
+ * Подготавливает массив постов перед выводом в шаблон
  * @param array $data Двумерный массив
  * @return array Подготовленый массив
  */
-function prepearingData($data)
+function prepearingPosts($posts)
 {
-    $arrays = $data;
-    foreach ($arrays as &$array) {
-        if (is_array($array)) {
-            if ($array['type'] === 'post-text') {
-                foreach ($array as $key => &$value) {
-                    if ($key === 'content') {
-                        $value = cropText($value);
-                        continue;
-                    }
-                    $value = htmlspecialchars($value);
-                }
-            } else {
-                foreach ($array as &$value) {
-                    $value = htmlspecialchars($value);
-                }
-            }
+    $safe_posts = Array();
+    foreach ($posts as $post) {
+        if (is_array($post)) {
+            $safe_posts[] = prepearingPost($post);
         }
     }
-    return $arrays;
+    return $safe_posts;
 }
 
-$safe_data = prepearingData($posts);
+$safe_data = prepearingPosts($posts);
 
 require('helpers.php');
 
@@ -109,3 +127,4 @@ $data = [
 print(include_template('layout.php', $data));
 
 ?>
+
