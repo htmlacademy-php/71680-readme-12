@@ -1,4 +1,6 @@
 <?php
+require('helpers.php');
+
 $is_auth = rand(0, 1);
 $user_name = 'Александр';
 $posts = [
@@ -38,6 +40,30 @@ $posts = [
         'avatar' => 'userpic.jpg'
     ],
 ];
+
+/**
+ * Получает массив постов и устанавливает случайную дату каждому посту
+ * @param array $post Ассоциативный массив с инмформацие о посте
+ * @param integer $index Индекс поста
+ * @return array Ассоциативный массив
+ */
+function getPostWithRandomDate($post, $index) {
+    $post['pub_date'] = generate_random_date($index);
+    return $post;
+}
+
+/**
+ * Получает массив постов и устанавливает случайную дату каждому посту
+ * @param array $posts Двумерный массив
+ * @return array Массив постов
+ */
+function getPostsWithRandomDate($posts) {
+    $posts_with_date = Array();
+    foreach ($posts as $key => $value) {
+        $posts_with_date[] = getPostWithRandomDate($value, $key);
+    }
+    return $posts_with_date;
+}
 
 /**
  * Получает текст и ограничивает его по количеству символов
@@ -113,9 +139,9 @@ function prepearingPosts($posts)
     return $safe_posts;
 }
 
-$safe_data = prepearingPosts($posts);
+$posts = getPostsWithRandomDate($posts);
 
-require('helpers.php');
+$safe_data = prepearingPosts($posts);
 
 $content = include_template('main.php', ['posts' => $safe_data]);
 $data = [

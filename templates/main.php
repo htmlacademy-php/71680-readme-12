@@ -139,7 +139,7 @@
                         </div>
                         <div class="post__info">
                             <b class="post__author-name"><?=$post['user_name']; ?></b>
-                            <time class="post__time" datetime="">дата</time>
+                            <time class="post__time" datetime="<?=$post['pub_date']; ?>">дата</time>
                         </div>
                     </a>
                 </div>
