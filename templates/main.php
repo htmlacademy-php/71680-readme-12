@@ -132,14 +132,14 @@
             </div>
             <footer class="post__footer">
                 <div class="post__author">
-                    <a class="post__author-link" href="#" title="Автор">
+                    <a class="post__author-link" href="#" title="<?=$post['date_for_title']; ?>">
                         <div class="post__avatar-wrapper">
                             <!--укажите путь к файлу аватара-->
                             <img class="post__author-avatar" src="img/<?=$post['avatar']; ?>" alt="Аватар пользователя">
                         </div>
                         <div class="post__info">
                             <b class="post__author-name"><?=$post['user_name']; ?></b>
-                            <time class="post__time" datetime="<?=$post['pub_date']; ?>">дата</time>
+                            <time class="post__time" datetime="<?=$post['pub_date']; ?>"><?=$post['relative_date']; ?></time>
                         </div>
                     </a>
                 </div>

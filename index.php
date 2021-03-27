@@ -1,5 +1,6 @@
 <?php
 require('helpers.php');
+date_default_timezone_set('Europe/Moscow');
 
 $is_auth = rand(0, 1);
 $user_name = 'Александр';
@@ -42,20 +43,77 @@ $posts = [
 ];
 
 /**
- * Получает массив постов и устанавливает случайную дату каждому посту
- * @param array $post Ассоциативный массив с инмформацие о посте
+ * Формирует строку с относительной разницой между датами
+ * @param int $diff Разница между датами в секундах
+ * @return string Относительный формат даты
+ */
+function getRelativeDateString($diff) {
+    $minutes = ceil($diff/60);
+    $hours = ceil($minutes/60);
+    $days = ceil($minutes/1440);
+    $weeks = ceil($minutes/10080);
+    $mounth = floor($weeks/4);
+
+    if ($minutes < 60) {
+        return $minutes.' '.get_noun_plural_form($minutes, 'минута', 'минуты', 'минут').' назад';
+    }
+
+    if ($minutes > 60 && $hours < 24) {
+        return $hours.' '.get_noun_plural_form($hours, 'час', 'часа', 'часов').' назад';
+    }
+
+    if ($hours >= 24 && $days < 7) {
+        return $days.' '.get_noun_plural_form($days, 'день', 'дня', 'дней').' назад';
+    }
+
+    if ($days >= 7 && $weeks < 5) {
+        return $weeks.' '.get_noun_plural_form($weeks, 'неделя', 'недели', 'недель').' назад';
+    }
+
+    if ($weeks >= 5) {
+        return $mounth.' '.get_noun_plural_form($mounth, 'месяц', 'месяца', 'месяцев').' назад';
+    }
+}
+
+/**
+ * Вычисляет разницу между датами и возвращает её в относительном формате
+ * @param string $date Строковое представление даты
+ * @return string Относительный формат даты
+ */
+function getRelativeDate($date) {
+    $pub_date = strtotime($date);
+    $now = strtotime('now');
+    $diff = $now - $pub_date;
+    return getRelativeDateString($diff);
+}
+
+
+/**
+ * Возвращает дату в формате 'дд.мм.гггг чч:мм'
+ * @param string $date Строковое представление даты
+ * @return string Строковое представление даты в формате 'дд.мм.гггг чч:мм'
+ */
+function getDateForTitle($date) {
+    return date('d.m.Y H:i', strtotime($date));
+}
+
+/**
+ * Устанавливает для поста случайную дату в разных форматах
+ * @param array $post Ассоциативный массив с информацией о посте
  * @param integer $index Индекс поста
  * @return array Ассоциативный массив
  */
 function getPostWithRandomDate($post, $index) {
     $post['pub_date'] = generate_random_date($index);
+    $post['relative_date'] = getRelativeDate($post['pub_date']);
+    $post['date_for_title'] = getDateForTitle($post['pub_date']);
     return $post;
 }
 
 /**
- * Получает массив постов и устанавливает случайную дату каждому посту
+ * Получает массив постов и устанавливает случайную дату каждому посту в разных форматах
  * @param array $posts Двумерный массив
- * @return array Массив постов
+ * @return array Массив постов с установленныи датами
  */
 function getPostsWithRandomDate($posts) {
     $posts_with_date = Array();
