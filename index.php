@@ -47,7 +47,8 @@ $posts = [
  * @param int $diff Разница между датами в секундах
  * @return string Относительный формат даты
  */
-function getRelativeDateString($diff) {
+function getRelativeDateString($diff)
+{
     $minutes = ceil($diff/60);
     $hours = ceil($minutes/60);
     $days = ceil($minutes/1440);
@@ -57,19 +58,15 @@ function getRelativeDateString($diff) {
     if ($minutes < 60) {
         return $minutes.' '.get_noun_plural_form($minutes, 'минута', 'минуты', 'минут').' назад';
     }
-
     if ($minutes > 60 && $hours < 24) {
         return $hours.' '.get_noun_plural_form($hours, 'час', 'часа', 'часов').' назад';
     }
-
     if ($hours >= 24 && $days < 7) {
         return $days.' '.get_noun_plural_form($days, 'день', 'дня', 'дней').' назад';
     }
-
     if ($days >= 7 && $weeks < 5) {
         return $weeks.' '.get_noun_plural_form($weeks, 'неделя', 'недели', 'недель').' назад';
     }
-
     if ($weeks >= 5) {
         return $mounth.' '.get_noun_plural_form($mounth, 'месяц', 'месяца', 'месяцев').' назад';
     }
@@ -80,20 +77,21 @@ function getRelativeDateString($diff) {
  * @param string $date Строковое представление даты
  * @return string Относительный формат даты
  */
-function getRelativeDate($date) {
+function getRelativeDate($date)
+{
     $pub_date = strtotime($date);
     $now = strtotime('now');
     $diff = $now - $pub_date;
     return getRelativeDateString($diff);
 }
 
-
 /**
  * Возвращает дату в формате 'дд.мм.гггг чч:мм'
  * @param string $date Строковое представление даты
  * @return string Строковое представление даты в формате 'дд.мм.гггг чч:мм'
  */
-function getDateForTitle($date) {
+function getDateForTitle($date)
+{
     return date('d.m.Y H:i', strtotime($date));
 }
 
@@ -103,7 +101,8 @@ function getDateForTitle($date) {
  * @param integer $index Индекс поста
  * @return array Ассоциативный массив
  */
-function getPostWithRandomDate($post, $index) {
+function getPostWithRandomDate($post, $index)
+{
     $post['pub_date'] = generate_random_date($index);
     $post['relative_date'] = getRelativeDate($post['pub_date']);
     $post['date_for_title'] = getDateForTitle($post['pub_date']);
@@ -115,7 +114,8 @@ function getPostWithRandomDate($post, $index) {
  * @param array $posts Двумерный массив
  * @return array Массив постов с установленныи датами
  */
-function getPostsWithRandomDate($posts) {
+function getPostsWithRandomDate($posts)
+{
     $posts_with_date = Array();
     foreach ($posts as $key => $value) {
         $posts_with_date[] = getPostWithRandomDate($value, $key);
@@ -153,9 +153,10 @@ function cropText($text, $limit = 300)
 /**
  * Укорачивает текст в посте
  * @param array $post Массив с постом
- * @return array Массив с укороченным текстом
+ * @return array Массив поста с укороченным текстом
  */
-function getShortenPostText($post) {
+function getShortenPostText($post)
+{
     if ($post['type'] !== 'post-text') {
         return $post;
     }
@@ -198,9 +199,7 @@ function prepearingPosts($posts)
 }
 
 $posts = getPostsWithRandomDate($posts);
-
 $safe_data = prepearingPosts($posts);
-
 $content = include_template('main.php', ['posts' => $safe_data]);
 $data = [
     'content' => $content,
@@ -209,6 +208,4 @@ $data = [
     'page_name' => 'readme',
 ];
 print(include_template('layout.php', $data));
-
 ?>
-
