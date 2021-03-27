@@ -92,7 +92,7 @@
             <div class="post__main">
                 <?php if ($post['type'] === 'post-link') :?>
                     <div class="post-link__wrapper">
-                        <a class="post-link__external" href="http://" title="Перейти по ссылке">
+                        <a class="post-link__external" href="http://<?=$post['content']; ?>" title="Перейти по ссылке">
                             <div class="post-link__info-wrapper">
                                 <div class="post-link__icon-wrapper">
                                     <img src="https://www.google.com/s2/favicons?domain=vitadental.ru" alt="Иконка">
@@ -122,19 +122,24 @@
                 <?php endif; ?>
 
                 <?php if ($post['type'] === 'post-text') :?>
-                    <?=$post['content']; ?>
+                    <?php if (isset($post['short_text'])) :?>
+                        <p><?=$post['short_text']; ?></p>
+                        <a class="post-text__more-link" href="#">Читать далее</a>
+                    <?php else: ?>
+                        <p><?=$post['content']; ?></p>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
             <footer class="post__footer">
                 <div class="post__author">
-                    <a class="post__author-link" href="#" title="Автор">
+                    <a class="post__author-link" href="#" title="<?=$post['date_for_title']; ?>">
                         <div class="post__avatar-wrapper">
                             <!--укажите путь к файлу аватара-->
                             <img class="post__author-avatar" src="img/<?=$post['avatar']; ?>" alt="Аватар пользователя">
                         </div>
                         <div class="post__info">
                             <b class="post__author-name"><?=$post['user_name']; ?></b>
-                            <time class="post__time" datetime="">дата</time>
+                            <time class="post__time" datetime="<?=$post['pub_date']; ?>"><?=$post['relative_date']; ?></time>
                         </div>
                     </a>
                 </div>

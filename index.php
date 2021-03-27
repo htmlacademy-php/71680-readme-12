@@ -1,4 +1,7 @@
 <?php
+require('helpers.php');
+date_default_timezone_set('Europe/Moscow');
+
 $is_auth = rand(0, 1);
 $user_name = 'Александр';
 $posts = [
@@ -40,6 +43,87 @@ $posts = [
 ];
 
 /**
+ * Формирует строку с относительной разницой между датами
+ * @param int $diff Разница между датами в секундах
+ * @return string Относительный формат даты
+ */
+function getRelativeDateString($diff)
+{
+    $minutes = ceil($diff/60);
+    $hours = ceil($minutes/60);
+    $days = ceil($minutes/1440);
+    $weeks = ceil($minutes/10080);
+    $mounth = floor($weeks/4);
+
+    if ($minutes < 60) {
+        return $minutes.' '.get_noun_plural_form($minutes, 'минута', 'минуты', 'минут').' назад';
+    }
+    if ($minutes > 60 && $hours < 24) {
+        return $hours.' '.get_noun_plural_form($hours, 'час', 'часа', 'часов').' назад';
+    }
+    if ($hours >= 24 && $days < 7) {
+        return $days.' '.get_noun_plural_form($days, 'день', 'дня', 'дней').' назад';
+    }
+    if ($days >= 7 && $weeks < 5) {
+        return $weeks.' '.get_noun_plural_form($weeks, 'неделя', 'недели', 'недель').' назад';
+    }
+    if ($weeks >= 5) {
+        return $mounth.' '.get_noun_plural_form($mounth, 'месяц', 'месяца', 'месяцев').' назад';
+    }
+}
+
+/**
+ * Вычисляет разницу между датами и возвращает её в относительном формате
+ * @param string $date Строковое представление даты
+ * @return string Относительный формат даты
+ */
+function getRelativeDate($date)
+{
+    $pub_date = strtotime($date);
+    $now = strtotime('now');
+    $diff = $now - $pub_date;
+    return getRelativeDateString($diff);
+}
+
+/**
+ * Возвращает дату в формате 'дд.мм.гггг чч:мм'
+ * @param string $date Строковое представление даты
+ * @return string Строковое представление даты в формате 'дд.мм.гггг чч:мм'
+ */
+function getDateForTitle($date)
+{
+    return date('d.m.Y H:i', strtotime($date));
+}
+
+/**
+ * Устанавливает для поста случайную дату в разных форматах
+ * @param array $post Ассоциативный массив с информацией о посте
+ * @param integer $index Индекс поста
+ * @return array Ассоциативный массив
+ */
+function getPostWithRandomDate($post, $index)
+{
+    $post['pub_date'] = generate_random_date($index);
+    $post['relative_date'] = getRelativeDate($post['pub_date']);
+    $post['date_for_title'] = getDateForTitle($post['pub_date']);
+    return $post;
+}
+
+/**
+ * Получает массив постов и устанавливает случайную дату каждому посту в разных форматах
+ * @param array $posts Двумерный массив
+ * @return array Массив постов с установленныи датами
+ */
+function getPostsWithRandomDate($posts)
+{
+    $posts_with_date = Array();
+    foreach ($posts as $key => $value) {
+        $posts_with_date[] = getPostWithRandomDate($value, $key);
+    }
+    return $posts_with_date;
+}
+
+/**
  * Получает текст и ограничивает его по количеству символов
  * @param string $text Текст поста, который нужно ограничить
  * @param integer $limit Максимальное количество символов
@@ -48,11 +132,10 @@ $posts = [
 function cropText($text, $limit = 300)
 {
     if (strlen(utf8_decode($text)) <= $limit) {
-        return '<p>'.htmlspecialchars($text).'</p>';
+        return $text;
     }
 
     $words = explode(' ', $text);
-    $read_more_link = '<a class="post-text__more-link" href="#">Читать далее</a>';
     $crop_text= '';
     $space_after_word = 1;
     $length = 0;
@@ -64,41 +147,59 @@ function cropText($text, $limit = 300)
             break;
         }
     }
-    return '<p>'.htmlspecialchars($crop_text).'...'.'</p>'.$read_more_link;
+    return $crop_text.'...';
 }
 
 /**
- * Подготавливает данные перед выводом в шаблон
+ * Укорачивает текст в посте
+ * @param array $post Массив с постом
+ * @return array Массив поста с укороченным текстом
+ */
+function getShortenPostText($post)
+{
+    if ($post['type'] !== 'post-text') {
+        return $post;
+    }
+    $post['short_text'] = cropText($post['content']);
+
+    if ($post['short_text'] === $post['content']) {
+        unset($post['short_text']);
+    }
+    return $post;
+}
+
+/**
+ * Подготавливает один пост перед выводом в шаблон
+ * @param array $post Ассоциативный массив
+ * @return array Подготовленый массив
+ */
+function prepearingPost($post)
+{
+    $prepearing_post = Array();
+    foreach ($post as $key => $value) {
+        $prepearing_post[$key] = htmlspecialchars($value);
+    }
+    return getShortenPostText($prepearing_post);
+}
+
+/**
+ * Подготавливает массив постов перед выводом в шаблон
  * @param array $data Двумерный массив
  * @return array Подготовленый массив
  */
-function prepearingData($data)
+function prepearingPosts($posts)
 {
-    $arrays = $data;
-    foreach ($arrays as &$array) {
-        if (is_array($array)) {
-            if ($array['type'] === 'post-text') {
-                foreach ($array as $key => &$value) {
-                    if ($key === 'content') {
-                        $value = cropText($value);
-                        continue;
-                    }
-                    $value = htmlspecialchars($value);
-                }
-            } else {
-                foreach ($array as &$value) {
-                    $value = htmlspecialchars($value);
-                }
-            }
+    $safe_posts = Array();
+    foreach ($posts as $post) {
+        if (is_array($post)) {
+            $safe_posts[] = prepearingPost($post);
         }
     }
-    return $arrays;
+    return $safe_posts;
 }
 
-$safe_data = prepearingData($posts);
-
-require('helpers.php');
-
+$posts = getPostsWithRandomDate($posts);
+$safe_data = prepearingPosts($posts);
 $content = include_template('main.php', ['posts' => $safe_data]);
 $data = [
     'content' => $content,
@@ -107,5 +208,4 @@ $data = [
     'page_name' => 'readme',
 ];
 print(include_template('layout.php', $data));
-
 ?>
