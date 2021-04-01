@@ -70,18 +70,18 @@ CREATE TABLE likes (
 
 CREATE TABLE subscriptions (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  author INT,
-  subscription INT,
-  FOREIGN KEY (author) REFERENCES users (id),
-  FOREIGN KEY (subscription) REFERENCES users (id)
+  author_id INT,
+  subscription_id INT,
+  FOREIGN KEY (author_id) REFERENCES users (id),
+  FOREIGN KEY (subscription_id) REFERENCES users (id)
 );
 
 CREATE TABLE messages (
   id INT AUTO_INCREMENT PRIMARY KEY,
   date_create DATETIME NOT NULL,
   content TEXT NOT NULL,
-  sender INT,
-  recipient INT,
-  FOREIGN KEY (sender) REFERENCES users (id),
-  FOREIGN KEY (recipient) REFERENCES users (id)
+  sender_id INT,
+  recipient_id INT,
+  FOREIGN KEY (sender_id) REFERENCES users (id),
+  FOREIGN KEY (recipient_id) REFERENCES users (id)
 );
