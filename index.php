@@ -103,9 +103,9 @@ function getDateForTitle($date)
  */
 function getPostWithRandomDate($post, $index)
 {
-    $post['pub_date'] = generate_random_date($index);
-    $post['relative_date'] = getRelativeDate($post['pub_date']);
-    $post['date_for_title'] = getDateForTitle($post['pub_date']);
+    $post['date_original'] = generate_random_date($index);
+    $post['date_relative'] = getRelativeDate($post['date_original']);
+    $post['date_format'] = getDateForTitle($post['date_original']);
     return $post;
 }
 
