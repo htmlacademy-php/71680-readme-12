@@ -29,10 +29,36 @@ NULL, NULL, 36, 3, 3),
 NULL, NULL, 12, 1, 3),
 
 ('2021-01-19 19:13:14', 'Лучшие курсы', NULL, NULL, NULL,
-NULL, 'www.htmlacademy.ru', 12, 1, 3);
+NULL, 'www.htmlacademy.ru', 12, 1, 5);
 
 /*добавляем комментарии*/
 INSERT INTO comments (`date_create`, `content`, `user_id`, `post_id`) VALUES
 ('2021-01-15 20:26:28', 'Круто получилось!))', 2, 3),
 ('2021-01-15 20:28:38', 'Мастер!', 1, 3),
 ('2021-01-17 12:38:06', 'Мечтать не вредно))', 2, 4);
+
+/*получить список постов с сортировкой по популярности и вместе с именами авторов и типом контента*/
+SELECT
+p.id,
+title,
+text_content,
+quote_author,
+image_url,
+video_url,
+link,
+view_number, u.login, tc.name FROM posts p
+JOIN users u ON p.user_id = u.id
+JOIN type_contents tc ON p.type_id = tc.id
+ORDER BY view_number DESC;
+
+/*получить список постов для конкретного пользователя*/
+SELECT * FROM posts WHERE user_id = 1;
+
+/*получить список комментариев для одного поста, в комментариях должен быть логин пользователя*/
+SELECT c.id, date_create, content, u.login FROM comments c JOIN users u ON c.user_id = u.id WHERE post_id = 3;
+
+/*добавить лайк к посту*/
+INSERT INTO likes ('user_id', 'post_id') VALUES (2, 3);
+
+/*подписаться на пользователя*/
+INSERT INTO subscriptions ('author_id', 'subscription_id') VALUES (2, 3);
