@@ -198,6 +198,56 @@ function prepearingPosts($posts)
     return $safe_posts;
 }
 
+$host = 'localhost';
+$user = 'root';
+$password = '';
+$database = 'readme';
+
+function connect($host, $user, $password, $database) {
+    $connection = mysqli_connect($host, $user, $password, $database);
+    if ($connection === false) {
+        print("Ошибка подключения: " . mysqli_connect_error());
+        return;
+    } else {
+        mysqli_set_charset($connection, "utf8");
+        return $connection;
+    }
+}
+
+function getTypeContent($conection) {
+    $sql = "SELECT * FROM type_contents";
+    $result = mysqli_query($conection, $sql);
+    $result = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    return $result;
+}
+
+function getPopularPosts($conection) {
+    $sql = "
+        SELECT
+        p.id,
+        title,
+        text_content,
+        quote_author,
+        image_url,
+        video_url,
+        link,
+        view_number, u.login, tc.name
+        FROM posts p
+        JOIN users u ON p.user_id = u.id
+        JOIN type_contents tc ON p.type_id = tc.id
+        ORDER BY view_number DESC;";
+    $result = mysqli_query($conection, $sql);
+    $result = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    return $result;
+}
+
+$conn = connect($host, $user, $password, $database);
+
+if ($conn) {
+    $type_content = getTypeContent($conn);
+    $popular_posts = getPopularPosts($conn);
+}
+
 $posts = getPostsWithRandomDate($posts);
 $safe_data = prepearingPosts($posts);
 $content = include_template('main.php', ['posts' => $safe_data]);
