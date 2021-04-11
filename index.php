@@ -244,13 +244,13 @@ function getPopularPosts($conection) {
 $conn = connect($host, $user, $password, $database);
 
 if ($conn) {
-    $type_content = getTypeContent($conn);
+    $content_types = getTypeContent($conn);
     $popular_posts = getPopularPosts($conn);
 }
 
 $posts = getPostsWithRandomDate($posts);
 $safe_data = prepearingPosts($posts);
-$content = include_template('main.php', ['posts' => $safe_data]);
+$content = include_template('main.php', ['posts' => $safe_data, 'content_types' => $content_types]);
 $data = [
     'content' => $content,
     'user_name' => htmlspecialchars($user_name),
