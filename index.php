@@ -225,13 +225,14 @@ function getPopularPosts($conection) {
     $sql = "
         SELECT
         p.id,
+        date_create,
         title,
         text_content,
         quote_author,
         image_url,
         video_url,
         link,
-        view_number, u.login, tc.name
+        view_number, u.login, tc.name_ikon
         FROM posts p
         JOIN users u ON p.user_id = u.id
         JOIN type_contents tc ON p.type_id = tc.id
