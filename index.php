@@ -239,7 +239,7 @@ function getPopularPosts($conection)
         FROM posts p
         JOIN users u ON p.user_id = u.id
         JOIN type_contents tc ON p.type_id = tc.id
-        ORDER BY view_number DESC;";
+        ORDER BY view_number DESC LIMIT 6;";
     $result = mysqli_query($conection, $sql);
     $result = mysqli_fetch_all($result, MYSQLI_ASSOC);
     return $result;
