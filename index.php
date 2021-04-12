@@ -96,29 +96,28 @@ function getDateForTitle($date)
 }
 
 /**
- * Устанавливает для поста случайную дату в разных форматах
+ * Устанавливает для поста дату в разных форматах
  * @param array $post Ассоциативный массив с информацией о посте
  * @param integer $index Индекс поста
  * @return array Ассоциативный массив
  */
-function getPostWithRandomDate($post, $index)
+function getPostWithDate($post, $index)
 {
-    $post['date_original'] = generate_random_date($index);
-    $post['date_relative'] = getRelativeDate($post['date_original']);
+    $post['date_relative'] = getRelativeDate($post['date_create']);
     $post['date_format'] = getDateForTitle($post['date_original']);
     return $post;
 }
 
 /**
- * Получает массив постов и устанавливает случайную дату каждому посту в разных форматах
+ * Получает массив постов и устанавливает дату каждому посту в разных форматах
  * @param array $posts Двумерный массив
  * @return array Массив постов с установленныи датами
  */
-function getPostsWithRandomDate($posts)
+function getPostsWithDate($posts)
 {
     $posts_with_date = Array();
     foreach ($posts as $key => $value) {
-        $posts_with_date[] = getPostWithRandomDate($value, $key);
+        $posts_with_date[] = getPostWithDate($value, $key);
     }
     return $posts_with_date;
 }
@@ -157,12 +156,12 @@ function cropText($text, $limit = 300)
  */
 function getShortenPostText($post)
 {
-    if ($post['type'] !== 'post-text') {
+    if ($post['post_type'] !== 'text') {
         return $post;
     }
-    $post['short_text'] = cropText($post['content']);
+    $post['short_text'] = cropText($post['text_content']);
 
-    if ($post['short_text'] === $post['content']) {
+    if ($post['short_text'] === $post['text_content']) {
         unset($post['short_text']);
     }
     return $post;
@@ -203,7 +202,8 @@ $user = 'root';
 $password = '';
 $database = 'readme';
 
-function connect($host, $user, $password, $database) {
+function connect($host, $user, $password, $database)
+{
     $connection = mysqli_connect($host, $user, $password, $database);
     if ($connection === false) {
         print("Ошибка подключения: " . mysqli_connect_error());
@@ -214,14 +214,16 @@ function connect($host, $user, $password, $database) {
     }
 }
 
-function getTypeContent($conection) {
+function getTypeContent($conection)
+{
     $sql = "SELECT * FROM type_contents";
     $result = mysqli_query($conection, $sql);
     $result = mysqli_fetch_all($result, MYSQLI_ASSOC);
     return $result;
 }
 
-function getPopularPosts($conection) {
+function getPopularPosts($conection)
+{
     $sql = "
         SELECT
         p.id,
@@ -249,7 +251,7 @@ if ($conn) {
     $popular_posts = getPopularPosts($conn);
 }
 
-$posts = getPostsWithRandomDate($posts);
+$posts = getPostsWithDate($popular_posts);
 $safe_data = prepearingPosts($posts);
 $content = include_template('main.php', ['posts' => $safe_data, 'content_types' => $content_types]);
 $data = [
