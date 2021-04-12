@@ -202,6 +202,14 @@ $user = 'root';
 $password = '';
 $database = 'readme';
 
+/**
+ * Функция для соединения с базой данных
+ * @param string $host имя хоста
+ * @param string $user пользователь базы данных
+ * @param string $password пароль от базы данных
+ * @param string $database имя базы данных
+ * @return object возвращает ресурс соединения, либо false если соединение неудалось
+ */
 function connect($host, $user, $password, $database)
 {
     $connection = mysqli_connect($host, $user, $password, $database);
@@ -214,6 +222,11 @@ function connect($host, $user, $password, $database)
     }
 }
 
+/**
+ * Получает тип контента из базы данных
+ * @param object ресурс соединения с базой данных
+ * @return array массив типов постов
+ */
 function getTypeContent($conection)
 {
     $sql = "SELECT * FROM type_contents";
@@ -222,6 +235,11 @@ function getTypeContent($conection)
     return $result;
 }
 
+/**
+ * Получает первые 6 популярных постов
+ * @param object ресурс соединения с базой данных
+ * @return array массив популярных постов
+ */
 function getPopularPosts($conection)
 {
     $sql = "
