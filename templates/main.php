@@ -55,14 +55,14 @@
     </div>
     <div class="popular__posts">
         <?php foreach ($posts as $post): ?>
-        <article class="popular__post post <?=$post['type']; ?>">
+        <article class="popular__post post post-<?=$post['post_type']; ?>">
             <header class="post__header">
                 <h2><?=$post['title']; ?></h2>
             </header>
             <div class="post__main">
-                <?php if ($post['type'] === 'post-link') :?>
+                <?php if ($post['post_type'] === 'link') :?>
                     <div class="post-link__wrapper">
-                        <a class="post-link__external" href="http://<?=$post['content']; ?>" title="Перейти по ссылке">
+                        <a class="post-link__external" href="http://<?=$post['link']; ?>" title="Перейти по ссылке">
                             <div class="post-link__info-wrapper">
                                 <div class="post-link__icon-wrapper">
                                     <img src="https://www.google.com/s2/favicons?domain=vitadental.ru" alt="Иконка">
@@ -71,32 +71,32 @@
                                     <h3><?=$post['title']; ?></h3>
                                 </div>
                             </div>
-                            <span><?=$post['content']; ?></span>
+                            <span><?=$post['link']; ?></span>
                         </a>
                     </div>
                 <?php endif; ?>
 
-                <?php if ($post['type'] === 'post-quote') :?>
+                <?php if ($post['post_type'] === 'quote') :?>
                     <blockquote>
                         <p>
-                            <?=$post['content']; ?>
+                            <?=$post['text_content']; ?>
                         </p>
                         <cite>Неизвестный Автор</cite>
                     </blockquote>
                 <?php endif; ?>
 
-                <?php if ($post['type'] === 'post-photo') :?>
+                <?php if ($post['post_type'] === 'photo') :?>
                     <div class="post-photo__image-wrapper">
-                        <img src="img/<?=$post['content']; ?>" alt="Фото от пользователя" width="360" height="240">
+                        <img src="img/<?=$post['image_url']; ?>" alt="Фото от пользователя" width="360" height="240">
                     </div>
                 <?php endif; ?>
 
-                <?php if ($post['type'] === 'post-text') :?>
+                <?php if ($post['post_type'] === 'text') :?>
                     <?php if (isset($post['short_text'])) :?>
                         <p><?=$post['short_text']; ?></p>
                         <a class="post-text__more-link" href="#">Читать далее</a>
                     <?php else: ?>
-                        <p><?=$post['content']; ?></p>
+                        <p><?=$post['text_content']; ?></p>
                     <?php endif; ?>
                 <?php endif; ?>
             </div>
@@ -104,12 +104,14 @@
                 <div class="post__author">
                     <a class="post__author-link" href="#" title="<?=$post['date_format']; ?>">
                         <div class="post__avatar-wrapper">
-                            <!--укажите путь к файлу аватара-->
-                            <img class="post__author-avatar" src="img/<?=$post['avatar']; ?>" alt="Аватар пользователя">
+                            <?php if ($post['avatar_url']) :?>
+                                <!--укажите путь к файлу аватара-->
+                                <img class="post__author-avatar" src="img/<?=$post['avatar']; ?>" alt="Аватар пользователя">
+                            <?php endif; ?>
                         </div>
                         <div class="post__info">
-                            <b class="post__author-name"><?=$post['user_name']; ?></b>
-                            <time class="post__time" datetime="<?=$post['date_original']; ?>"><?=$post['date_relative']; ?></time>
+                            <b class="post__author-name"><?=$post['login']; ?></b>
+                            <time class="post__time" datetime="<?=$post['date_create']; ?>"><?=$post['date_relative']; ?></time>
                         </div>
                     </a>
                 </div>

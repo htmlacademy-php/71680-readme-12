@@ -104,7 +104,7 @@ function getDateForTitle($date)
 function getPostWithDate($post, $index)
 {
     $post['date_relative'] = getRelativeDate($post['date_create']);
-    $post['date_format'] = getDateForTitle($post['date_original']);
+    $post['date_format'] = getDateForTitle($post['date_create']);
     return $post;
 }
 
@@ -234,6 +234,7 @@ function getPopularPosts($conection)
         image_url,
         video_url,
         link,
+        avatar_url,
         view_number, u.login, tc.name_ikon as post_type
         FROM posts p
         JOIN users u ON p.user_id = u.id

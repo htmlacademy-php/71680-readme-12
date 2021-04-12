@@ -29,7 +29,13 @@ NULL, NULL, 36, 3, 3),
 NULL, NULL, 12, 1, 3),
 
 ('2021-01-19 19:13:14', 'Лучшие курсы', NULL, NULL, NULL,
-NULL, 'www.htmlacademy.ru', 12, 1, 5);
+NULL, 'www.htmlacademy.ru', 12, 1, 5),
+
+('2021-01-05 23:02:03', 'Самый популярный пост!', 'Этот текстовый пост является самым популярным, и будет выводится первым в Вашей ленте новостей=)',
+NULL, NULL,NULL, NULL, 92, 2, 1),
+
+('2021-01-05 23:02:03', 'Второй в списке', 'Этот текстовый пост является вторым по популярности, и будет выводится вторым в Вашей ленте новостей=)',
+NULL, NULL,NULL, NULL, 45, 2, 1);
 
 /*добавляем комментарии*/
 INSERT INTO comments (`date_create`, `content`, `user_id`, `post_id`) VALUES
@@ -47,6 +53,7 @@ quote_author,
 image_url,
 video_url,
 link,
+avatar_url,
 view_number, u.login, tc.name_ikon as type
 FROM posts p
 JOIN users u ON p.user_id = u.id
