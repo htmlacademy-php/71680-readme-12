@@ -263,7 +263,12 @@ function getPopularPosts($conection)
     return $result;
 }
 
-$conn = connect($host, $user, $password, $database);
+define("HOST", 'localhost');
+define("USER", 'root');
+define("PASSWORD", '');
+define("DATABASE", 'readme');
+
+$conn = connect(HOST, USER, PASSWORD, DATABASE);
 
 if ($conn) {
     $content_types = getTypeContent($conn);

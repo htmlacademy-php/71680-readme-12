@@ -67,7 +67,7 @@ SELECT * FROM posts WHERE user_id = 1;
 SELECT c.id, date_create, content, u.login FROM comments c JOIN users u ON c.user_id = u.id WHERE post_id = 3;
 
 /*добавить лайк к посту*/
-INSERT INTO likes ('user_id', 'post_id') VALUES (2, 3);
+INSERT INTO likes (`user_id`, `post_id`) VALUES (2, 3);
 
 /*подписаться на пользователя*/
-INSERT INTO subscriptions ('author_id', 'subscription_id') VALUES (2, 3);
+INSERT INTO subscriptions (`author_id`, `subscription_id`) VALUES (2, 3);
