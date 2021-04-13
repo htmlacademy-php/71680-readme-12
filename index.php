@@ -197,22 +197,18 @@ function prepearingPosts($posts)
     return $safe_posts;
 }
 
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'readme';
+define("HOST", 'localhost');
+define("USER", 'root');
+define("PASSWORD", '');
+define("DATABASE", 'readme');
 
 /**
  * Функция для соединения с базой данных
- * @param string $host имя хоста
- * @param string $user пользователь базы данных
- * @param string $password пароль от базы данных
- * @param string $database имя базы данных
  * @return object возвращает ресурс соединения, либо false если соединение неудалось
  */
-function connect($host, $user, $password, $database)
+function connect()
 {
-    $connection = mysqli_connect($host, $user, $password, $database);
+    $connection = mysqli_connect(HOST, USER, PASSWORD, DATABASE);
     if ($connection === false) {
         print("Ошибка подключения: " . mysqli_connect_error());
         return;
@@ -253,7 +249,9 @@ function getPopularPosts($conection)
         video_url,
         link,
         avatar_url,
-        view_number, u.login, tc.name_icon as post_type
+        view_number, 
+        u.login, 
+        tc.name_icon as post_type
         FROM posts p
         JOIN users u ON p.user_id = u.id
         JOIN type_contents tc ON p.type_id = tc.id
@@ -263,17 +261,23 @@ function getPopularPosts($conection)
     return $result;
 }
 
-define("HOST", 'localhost');
-define("USER", 'root');
-define("PASSWORD", '');
-define("DATABASE", 'readme');
+/**
+ * Подключается к базе данных и запрашивает данные
+ * @return array массив с данными
+ */
+function getData() 
+{
+    $conn = connect();
 
-$conn = connect(HOST, USER, PASSWORD, DATABASE);
-
-if ($conn) {
+    if (!$conn) {
+        return;
+    }
     $content_types = getTypeContent($conn);
     $popular_posts = getPopularPosts($conn);
+    return [$content_types, $popular_posts];
 }
+
+[$content_types, $popular_posts] = getData();
 
 $posts = getPostsWithDate($popular_posts);
 $safe_data = prepearingPosts($posts);
