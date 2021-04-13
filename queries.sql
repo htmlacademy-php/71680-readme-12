@@ -1,5 +1,5 @@
 /*Добавления типов контента для поста*/
-INSERT INTO type_contents (`name`, `name_ikon`) VALUES
+INSERT INTO type_contents (`name`, `name_icon`) VALUES
 ('Текст', 'text'),
 ('Цитата', 'quote'),
 ('Картинка', 'photo'),
@@ -29,7 +29,13 @@ NULL, NULL, 36, 3, 3),
 NULL, NULL, 12, 1, 3),
 
 ('2021-01-19 19:13:14', 'Лучшие курсы', NULL, NULL, NULL,
-NULL, 'www.htmlacademy.ru', 12, 1, 5);
+NULL, 'www.htmlacademy.ru', 12, 1, 5),
+
+('2021-01-05 23:02:03', 'Самый популярный пост!', 'Этот текстовый пост является самым популярным, и будет выводится первым в Вашей ленте новостей=)',
+NULL, NULL,NULL, NULL, 92, 2, 1),
+
+('2021-01-05 23:02:03', 'Второй в списке', 'Этот текстовый пост является вторым по популярности, и будет выводится вторым в Вашей ленте новостей=)',
+NULL, NULL,NULL, NULL, 45, 2, 1);
 
 /*добавляем комментарии*/
 INSERT INTO comments (`date_create`, `content`, `user_id`, `post_id`) VALUES
@@ -40,13 +46,16 @@ INSERT INTO comments (`date_create`, `content`, `user_id`, `post_id`) VALUES
 /*получить список постов с сортировкой по популярности и вместе с именами авторов и типом контента*/
 SELECT
 p.id,
+date_create,
 title,
 text_content,
 quote_author,
 image_url,
 video_url,
 link,
-view_number, u.login, tc.name FROM posts p
+avatar_url,
+view_number, u.login, tc.name_icon as type
+FROM posts p
 JOIN users u ON p.user_id = u.id
 JOIN type_contents tc ON p.type_id = tc.id
 ORDER BY view_number DESC;
@@ -58,7 +67,7 @@ SELECT * FROM posts WHERE user_id = 1;
 SELECT c.id, date_create, content, u.login FROM comments c JOIN users u ON c.user_id = u.id WHERE post_id = 3;
 
 /*добавить лайк к посту*/
-INSERT INTO likes ('user_id', 'post_id') VALUES (2, 3);
+INSERT INTO likes (`user_id`, `post_id`) VALUES (2, 3);
 
 /*подписаться на пользователя*/
-INSERT INTO subscriptions ('author_id', 'subscription_id') VALUES (2, 3);
+INSERT INTO subscriptions (`author_id`, `subscription_id`) VALUES (2, 3);
