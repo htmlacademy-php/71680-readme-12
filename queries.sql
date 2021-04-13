@@ -1,5 +1,5 @@
 /*Добавления типов контента для поста*/
-INSERT INTO type_contents (`name`, `name_ikon`) VALUES
+INSERT INTO type_contents (`name`, `name_icon`) VALUES
 ('Текст', 'text'),
 ('Цитата', 'quote'),
 ('Картинка', 'photo'),
@@ -54,7 +54,7 @@ image_url,
 video_url,
 link,
 avatar_url,
-view_number, u.login, tc.name_ikon as type
+view_number, u.login, tc.name_icon as type
 FROM posts p
 JOIN users u ON p.user_id = u.id
 JOIN type_contents tc ON p.type_id = tc.id

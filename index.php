@@ -253,7 +253,7 @@ function getPopularPosts($conection)
         video_url,
         link,
         avatar_url,
-        view_number, u.login, tc.name_ikon as post_type
+        view_number, u.login, tc.name_icon as post_type
         FROM posts p
         JOIN users u ON p.user_id = u.id
         JOIN type_contents tc ON p.type_id = tc.id
