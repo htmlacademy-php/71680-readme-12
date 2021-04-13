@@ -32,17 +32,24 @@
                 </li>
             </ul>
         </div>
+
         <div class="popular__filters filters">
             <b class="popular__filters-caption filters__caption">Тип контента:</b>
             <ul class="popular__filters-list filters__list">
                 <li class="popular__filters-item popular__filters-item--all filters__item filters__item--all">
-                    <a class="filters__button filters__button--ellipse filters__button--all filters__button--active" href="#">
+                    <a class="filters__button filters__button--ellipse filters__button--all
+                        <?=$filter_type === '' ? 'filters__button--active' : '';?>"
+                        href="./">
                         <span>Все</span>
                     </a>
                 </li>
                 <?php foreach ($content_types as $type) :?>
                     <li class="popular__filters-item filters__item">
-                        <a class="filters__button filters__button--<?=$type['name_icon']?> button" href="#">
+                        <a
+                            class="button filters__button filters__button--<?=$type['name_icon']?>
+                            <?=$filter_type === $type['id'] ? 'filters__button--active' : '';?>"
+                            href="?type=<?=$type['id']?>"
+                        >
                             <span class="visually-hidden"><?=$type['name']?></span>
                             <svg class="filters__icon" width="22" height="18">
                                 <use xlink:href="#icon-filter-<?=$type['name_icon']?>"></use>

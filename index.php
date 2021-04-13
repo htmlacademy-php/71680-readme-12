@@ -1,7 +1,6 @@
 <?php
 require('helpers.php');
 date_default_timezone_set('Europe/Moscow');
-
 $is_auth = rand(0, 1);
 $user_name = 'Александр';
 $posts = [
@@ -249,8 +248,8 @@ function getPopularPosts($conection)
         video_url,
         link,
         avatar_url,
-        view_number, 
-        u.login, 
+        view_number,
+        u.login,
         tc.name_icon as post_type
         FROM posts p
         JOIN users u ON p.user_id = u.id
@@ -265,7 +264,7 @@ function getPopularPosts($conection)
  * Подключается к базе данных и запрашивает данные
  * @return array массив с данными
  */
-function getData() 
+function getData()
 {
     $conn = connect();
 
@@ -279,9 +278,18 @@ function getData()
 
 [$content_types, $popular_posts] = getData();
 
+$filter_type = $_GET['type'] ?? '';
+
 $posts = getPostsWithDate($popular_posts);
 $safe_data = prepearingPosts($posts);
-$content = include_template('main.php', ['posts' => $safe_data, 'content_types' => $content_types]);
+$content = include_template('main.php',
+    [
+        'posts' => $safe_data,
+        'content_types' => $content_types,
+        'filter_type' => $filter_type,
+    ]
+);
+
 $data = [
     'content' => $content,
     'user_name' => htmlspecialchars($user_name),
