@@ -207,13 +207,13 @@ define("DATABASE", 'readme');
  */
 function connect()
 {
-    $connection = mysqli_connect(HOST, USER, PASSWORD, DATABASE);
-    if ($connection === false) {
-        print("Ошибка подключения: " . mysqli_connect_error());
+    $mysqli  = new mysqli(HOST, USER, PASSWORD, DATABASE);
+    if ($mysqli->connect_errno) {
+        print("Ошибка подключения: " . $mysqli->connect_errno);
         return;
     } else {
-        mysqli_set_charset($connection, "utf8");
-        return $connection;
+        $mysqli->set_charset("utf8");
+        return $mysqli;
     }
 }
 
@@ -222,11 +222,11 @@ function connect()
  * @param object ресурс соединения с базой данных
  * @return array массив типов постов
  */
-function getTypeContent($conection)
+function getTypeContent($mysqli)
 {
     $sql = "SELECT * FROM type_contents";
-    $result = mysqli_query($conection, $sql);
-    $result = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $result = $mysqli->query($sql);
+    $result = $result->fetch_all(MYSQLI_ASSOC);
     return $result;
 }
 
@@ -235,9 +235,9 @@ function getTypeContent($conection)
  * @param object ресурс соединения с базой данных
  * @return array массив популярных постов
  */
-function getPopularPosts($conection)
+function getPopularPosts($mysqli)
 {
-    $sql = "
+    $sql= "
         SELECT
         p.id,
         date_create,
@@ -254,10 +254,39 @@ function getPopularPosts($conection)
         FROM posts p
         JOIN users u ON p.user_id = u.id
         JOIN type_contents tc ON p.type_id = tc.id
-        ORDER BY view_number DESC LIMIT 6;";
-    $result = mysqli_query($conection, $sql);
-    $result = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    return $result;
+        ORDER BY view_number DESC LIMIT 6
+    ";
+    $result = $mysqli->query($sql);
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
+
+function getPostByType($mysqli)
+{
+    $type = $_GET['type'];
+    $stmt = $mysqli->prepare("
+        SELECT
+        p.id,
+        date_create,
+        title,
+        text_content,
+        quote_author,
+        image_url,
+        video_url,
+        link,
+        avatar_url,
+        view_number,
+        u.login,
+        tc.name_icon as post_type
+        FROM posts p
+        JOIN users u ON p.user_id = u.id
+        JOIN type_contents tc ON p.type_id = tc.id
+        WHERE tc.id = ?
+        ORDER BY view_number DESC LIMIT 6
+    ");
+    $stmt->bind_param('i', $type);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_all(MYSQLI_ASSOC);
 }
 
 /**
@@ -271,9 +300,14 @@ function getData()
     if (!$conn) {
         return;
     }
+
+    if (isset($_GET['type'])) {
+        $post = getPostByType($conn);
+    } else {
+        $post = getPopularPosts($conn);
+    }
     $content_types = getTypeContent($conn);
-    $popular_posts = getPopularPosts($conn);
-    return [$content_types, $popular_posts];
+    return [$content_types, $post];
 }
 
 [$content_types, $popular_posts] = getData();

@@ -64,7 +64,7 @@
         <?php foreach ($posts as $post): ?>
         <article class="popular__post post post-<?=$post['post_type']; ?>">
             <header class="post__header">
-                <h2><?=$post['title']; ?></h2>
+                <h2><a href="./post.php?id=<?=$post['id'];?>"><?=$post['title'];?></a></h2>
             </header>
             <div class="post__main">
                 <?php if ($post['post_type'] === 'link') :?>
