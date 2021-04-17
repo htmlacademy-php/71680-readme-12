@@ -1,8 +1,8 @@
 <div class="post__main">
     <blockquote>
     <p>
-        Тысячи людей живут без любви, но никто — без воды.
+        <?=$post['text_content']; ?>
     </p>
-    <cite>Xью Оден</cite>
+    <cite><?=$post['quote_author']; ?></cite>
     </blockquote>
 </div>
