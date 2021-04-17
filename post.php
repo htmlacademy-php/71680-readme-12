@@ -1,6 +1,12 @@
 <?php
 require('helpers.php');
 
+
+if (empty($_GET['id'])) {
+    header("HTTP/1.0 404 Not Found");
+    return;
+}
+
 $templates = [
     'video' => 'video.php',
     'text' => 'text.php',
@@ -157,7 +163,7 @@ function getContent($mysqli)
     $stmt->bind_param('i', $id);
     $stmt->execute();
     $result = $stmt->get_result();
-    return $result->fetch_all(MYSQLI_ASSOC)[0];
+    return $result->fetch_all(MYSQLI_ASSOC);
 }
 
 function getUserPublicationsCount($mysqli, $user_id)
@@ -224,6 +230,13 @@ function getCountViews($count)
 
 $mysqli = connect();
 $data = getContent($mysqli);
+
+if (!$data) {
+    header("HTTP/1.0 404 Not Found");
+    return;
+}
+
+$data = $data[0];
 
 $type = $data['type'];
 $template = $templates[$type];
