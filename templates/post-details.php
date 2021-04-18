@@ -3,7 +3,7 @@
         <h1 class="page__title page__title--publication"><?= $info['title']; ?></h1>
         <section class="post-details">
             <h2 class="visually-hidden">Публикация</h2>
-            <div class="post-details__wrapper post-<?= $info['type']; ?>">
+            <div class="post-details__wrapper post-<?= $info['post_type']; ?>">
                 <div class="post-details__main-block post post--details">
                     <?php if (isset($post)) : ?>
                         <?= $post; ?>
@@ -64,28 +64,28 @@
                         <div class="comments__list-wrapper">
                             <?php if ($comments) :?>
                             <ul class="comments__list">
-                            <?php foreach($comments as $comment) :?>
+                            <?php foreach($comments as $key => $value) :?>
                                 <li class="comments__item user">
                                     <div class="comments__avatar">
                                         <a class="user__avatar-link" href="#">
-                                            <?php if ($comment['avatar_url']) :?>
-                                                <img class="comments__picture" src="img/<?=$comment['avatar_url'];?>" alt="Аватар пользователя">
+                                            <?php if ($value['avatar_url']) :?>
+                                                <img class="comments__picture" src="img/<?=$value['avatar_url'];?>" alt="Аватар пользователя">
                                             <?php endif;?>
                                         </a>
                                     </div>
                                     <div class="comments__info">
                                         <div class="comments__name-wrapper">
                                             <a class="comments__user-name" href="#">
-                                                <span><?=$comment['login'];?></span>
+                                                <span><?=$value['login'];?></span>
                                             </a>
-                                            <time class="comments__time" datetime="<?=$comment['date_create']?>"><?=$comment['relative_time']?></time>
+                                            <time class="comments__time" datetime="<?=$value['date_create'];?>"><?=$value['relative_time'];?></time>
                                         </div>
                                         <p class="comments__text">
-                                            <?=$comment['content'];?>
+                                            <?=$value['content'];?>
                                         </p>
                                     </div>
                                 </li>
-                            <?php endforeach; ?>
+                            <?php endforeach;?>
                             </ul>
                             <a class="comments__more-link" href="#">
                                 <span>Показать все комментарии</span>

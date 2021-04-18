@@ -1,6 +1,6 @@
 <?php
 require('helpers.php');
-
+require('utils.php');
 
 if (empty($_GET['id'])) {
     header("HTTP/1.0 404 Not Found");
@@ -14,119 +14,6 @@ $templates = [
     'quote' => 'quote.php',
     'photo' => 'image.php'
 ];
-
-function cropText($text, $limit = 300)
-{
-    if (strlen(utf8_decode($text)) <= $limit) {
-        return $text;
-    }
-
-    $words = explode(' ', $text);
-    $crop_text= '';
-    $space_after_word = 1;
-    $length = 0;
-
-    foreach ($words as $key => $value) {
-        $length += strlen(utf8_decode($value)) + $space_after_word;
-        if ($length > $limit) {
-            $crop_text = implode(' ', array_slice($words, 0, $key));
-            break;
-        }
-    }
-    return $crop_text.'...';
-}
-
-/**
- * Формирует строку с относительной разницой между датами
- * @param int $diff Разница между датами в секундах
- * @return string Относительный формат даты
- */
-function getRelativeDateString($diff, $ending)
-{
-    $ending = ' '.$ending;
-    $minutes = ceil($diff/60);
-    $hours = ceil($minutes/60);
-    $days = ceil($minutes/1440);
-    $weeks = ceil($minutes/10080);
-    $mounth = floor($weeks/4);
-
-    if ($minutes < 60) {
-        return $minutes.' '.get_noun_plural_form($minutes, 'минута', 'минуты', 'минут')."{$ending}";
-    }
-    if ($minutes > 60 && $hours < 24) {
-        return $hours.' '.get_noun_plural_form($hours, 'час', 'часа', 'часов')."{$ending}";
-    }
-    if ($hours >= 24 && $days < 7) {
-        return $days.' '.get_noun_plural_form($days, 'день', 'дня', 'дней')."{$ending}";
-    }
-    if ($days >= 7 && $weeks < 5) {
-        return $weeks.' '.get_noun_plural_form($weeks, 'неделя', 'недели', 'недель')."{$ending}";
-    }
-    if ($weeks >= 5) {
-        return $mounth.' '.get_noun_plural_form($mounth, 'месяц', 'месяца', 'месяцев')."{$ending}";
-    }
-}
-
-/**
- * Вычисляет разницу между датами и возвращает её в относительном формате
- * @param string $date Строковое представление даты
- * @return string Относительный формат даты
- */
-function getRelativeDate($date, $ending)
-{
-    $pub_date = strtotime($date);
-    $now = strtotime('now');
-    $diff = $now - $pub_date;
-    return getRelativeDateString($diff, $ending);
-}
-
-/**
- * Укорачивает текст в посте
- * @param array $post Массив с постом
- * @return array Массив поста с укороченным текстом
- */
-function getShortenPostText($post)
-{
-    if ($post['type'] !== 'text') {
-        return $post;
-    }
-    $post['short_text'] = cropText($post['text_content']);
-
-    if ($post['short_text'] === $post['text_content']) {
-        unset($post['short_text']);
-    }
-    return $post;
-}
-
-/**
- * Подготавливает один пост перед выводом в шаблон
- * @param array $post Ассоциативный массив
- * @return array Подготовленый массив
- */
-function prepearingPost($post)
-{
-    $prepearing_post = Array();
-    foreach ($post as $key => $value) {
-        $prepearing_post[$key] = htmlspecialchars($value);
-    }
-    return getShortenPostText($prepearing_post);
-}
-
-/**
- * Подготавливает массив постов перед выводом в шаблон
- * @param array $data Двумерный массив
- * @return array Подготовленый массив
- */
-function prepearingPosts($posts)
-{
-    $safe_posts = Array();
-    foreach ($posts as $post) {
-        if (is_array($post)) {
-            $safe_posts[] = prepearingPost($post);
-        }
-    }
-    return $safe_posts;
-}
 
 define("HOST", 'localhost');
 define("USER", 'root');
@@ -154,7 +41,7 @@ function getContent($mysqli)
     $id = $_GET['id'];
     $stmt = $mysqli->prepare("
         SELECT p.id, date_create, title, text_content, quote_author, image_url,
-        video_url, link, avatar_url, view_number, user_id, u.login, u.date_registration, tc.name_icon as type
+        video_url, link, avatar_url, view_number, user_id, u.login, u.date_registration, tc.name_icon as post_type
         FROM posts p
         JOIN users u ON p.user_id = u.id
         JOIN type_contents tc ON p.type_id = tc.id
@@ -231,14 +118,14 @@ function getCountViews($count)
 $mysqli = connect();
 $data = getContent($mysqli);
 
-if (!$data) {
+if (empty($data)) {
     header("HTTP/1.0 404 Not Found");
     return;
 }
 
 $data = $data[0];
 
-$type = $data['type'];
+$type = $data['post_type'];
 $template = $templates[$type];
 
 $safe_post = prepearingPost($data);
