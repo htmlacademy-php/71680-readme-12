@@ -3,7 +3,8 @@
 class Post {
 
     private $mysqli;
-    public $id, $post_type;
+    public $id;
+    public $author_id;
 
     public function __construct($id, $mysqli) {
         $this->id = $id;
@@ -23,9 +24,17 @@ class Post {
         $stmt->bind_param('i', $this->id);
         $stmt->execute();
         $result = $stmt->get_result();
-        $result = $result->fetch_all(MYSQLI_ASSOC);
-        $this->post_type = $result[0]['post_type'];
+        $result = $result->fetch_object();
+        if ($result) {
+            $this->setAuthorId($result->user_id);
+            $result->publications_count = $this->getAuthorPublicationsCount();
+            $result->subscribers_count = $this->getAuthorSubscribersCount();
+        }
         return $result;
+    }
+
+    private function setAuthorId($id) {
+        $this->author_id = $id;
     }
 
     public function getPostComments()
@@ -39,7 +48,18 @@ class Post {
         $stmt->bind_param('i', $this->id);
         $stmt->execute();
         $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
+        $result = $result->fetch_all(MYSQLI_ASSOC);
+        $result = $this->secureComments($result);
+        return $result;
+    }
+
+    private function secureComments($comments) {
+        $safe_content = Array();
+        foreach ($comments as $comment) {
+            $comment['content'] = htmlspecialchars($comment['content']);
+            $safe_content[] = $comment;
+        }
+        return $safe_content;
     }
 
     public function getCountPostLikes()
@@ -51,6 +71,23 @@ class Post {
         return $result->fetch_array()[0];
     }
 
+    private function getAuthorPublicationsCount()
+    {
+        $stmt = $this->mysqli->prepare("SELECT COUNT(*) FROM posts WHERE user_id = ?");
+        $stmt->bind_param('i', $this->author_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_array()[0];
+    }
+
+    private function getAuthorSubscribersCount()
+    {
+        $stmt = $this->mysqli->prepare("SELECT COUNT(*) FROM subscriptions WHERE subscription_id = ?");
+        $stmt->bind_param('i', $this->author_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_array()[0];
+    }
 }
 
 ?>

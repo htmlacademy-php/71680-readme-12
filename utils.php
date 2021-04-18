@@ -1,4 +1,26 @@
 <?php
+
+define("HOST", 'localhost');
+define("USER", 'root');
+define("PASSWORD", '');
+define("DATABASE", 'readme');
+
+/**
+ * Функция для соединения с базой данных
+ * @return object возвращает ресурс соединения, либо false если соединение неудалось
+ */
+function connect()
+{
+    $mysqli  = new mysqli(HOST, USER, PASSWORD, DATABASE);
+    if ($mysqli->connect_errno) {
+        print("Ошибка подключения: " . $mysqli->connect_errno);
+        return;
+    } else {
+        $mysqli->set_charset("utf8");
+        return $mysqli;
+    }
+}
+
 /**
  * Формирует строку с относительной разницой между датами
  * @param int $diff Разница между датами в секундах

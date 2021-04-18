@@ -5,27 +5,6 @@ date_default_timezone_set('Europe/Moscow');
 $is_auth = rand(0, 1);
 $user_name = 'Александр';
 
-define("HOST", 'localhost');
-define("USER", 'root');
-define("PASSWORD", '');
-define("DATABASE", 'readme');
-
-/**
- * Функция для соединения с базой данных
- * @return object возвращает ресурс соединения, либо false если соединение неудалось
- */
-function connect()
-{
-    $mysqli  = new mysqli(HOST, USER, PASSWORD, DATABASE);
-    if ($mysqli->connect_errno) {
-        print("Ошибка подключения: " . $mysqli->connect_errno);
-        return;
-    } else {
-        $mysqli->set_charset("utf8");
-        return $mysqli;
-    }
-}
-
 /**
  * Получает тип контента из базы данных
  * @param object ресурс соединения с базой данных
