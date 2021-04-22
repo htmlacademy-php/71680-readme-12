@@ -25,17 +25,7 @@
                         <form class="adding-post__form form" action="#" method="post">
                             <div class="form__text-inputs-wrapper">
                                 <div class="form__text-inputs">
-                                    <div class="adding-post__input-wrapper form__input-wrapper">
-                                        <label class="adding-post__label form__label" for="text-heading">Заголовок <span class="form__input-required">*</span></label>
-                                        <div class="form__input-section">
-                                            <input class="adding-post__input form__input" id="text-heading" type="text" name="text-heading" placeholder="Введите заголовок">
-                                            <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
-                                            <div class="form__error-text">
-                                                <h3 class="form__error-title">Заголовок сообщения</h3>
-                                                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <?php include('title-input.php');?>
                                     <div class="adding-post__textarea-wrapper form__textarea-wrapper">
                                         <label class="adding-post__label form__label" for="post-text">Текст поста <span class="form__input-required">*</span></label>
                                         <div class="form__input-section">
@@ -47,17 +37,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="adding-post__input-wrapper form__input-wrapper">
-                                        <label class="adding-post__label form__label" for="post-tags">Теги</label>
-                                        <div class="form__input-section">
-                                            <input class="adding-post__input form__input" id="post-tags" type="text" name="photo-heading" placeholder="Введите теги">
-                                            <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
-                                            <div class="form__error-text">
-                                                <h3 class="form__error-title">Заголовок сообщения</h3>
-                                                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <?php include('tags-input.php');?>
                                 </div>
                                 <div class="form__invalid-block">
                                     <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
@@ -67,10 +47,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="adding-post__buttons">
-                                <button class="adding-post__submit button button--main" type="submit">Опубликовать</button>
-                                <a class="adding-post__close" href="#">Закрыть</a>
-                            </div>
+                            <?php include('submit.php');?>
                         </form>
                     </section>
 
@@ -79,17 +56,7 @@
                         <form class="adding-post__form form" action="#" method="post">
                             <div class="form__text-inputs-wrapper">
                                 <div class="form__text-inputs">
-                                    <div class="adding-post__input-wrapper form__input-wrapper">
-                                        <label class="adding-post__label form__label" for="quote-heading">Заголовок <span class="form__input-required">*</span></label>
-                                        <div class="form__input-section">
-                                            <input class="adding-post__input form__input" id="quote-heading" type="text" name="quote-heading" placeholder="Введите заголовок">
-                                            <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
-                                            <div class="form__error-text">
-                                                <h3 class="form__error-title">Заголовок сообщения</h3>
-                                                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <?php include('title-input.php');?>
                                     <div class="adding-post__input-wrapper form__textarea-wrapper">
                                         <label class="adding-post__label form__label" for="cite-text">Текст цитаты <span class="form__input-required">*</span></label>
                                         <div class="form__input-section">
@@ -112,17 +79,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="adding-post__input-wrapper form__input-wrapper">
-                                        <label class="adding-post__label form__label" for="cite-tags">Теги</label>
-                                        <div class="form__input-section">
-                                            <input class="adding-post__input form__input" id="cite-tags" type="text" name="photo-heading" placeholder="Введите теги">
-                                            <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
-                                            <div class="form__error-text">
-                                                <h3 class="form__error-title">Заголовок сообщения</h3>
-                                                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <?php include('tags-input.php');?>
                                 </div>
                                 <div class="form__invalid-block">
                                     <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
@@ -132,10 +89,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="adding-post__buttons">
-                                <button class="adding-post__submit button button--main" type="submit">Опубликовать</button>
-                                <a class="adding-post__close" href="#">Закрыть</a>
-                            </div>
+                            <?php include('submit.php');?>
                         </form>
                     </section>
 
@@ -144,17 +98,7 @@
                         <form class="adding-post__form form" action="#" method="post" enctype="multipart/form-data">
                             <div class="form__text-inputs-wrapper">
                                 <div class="form__text-inputs">
-                                    <div class="adding-post__input-wrapper form__input-wrapper">
-                                        <label class="adding-post__label form__label" for="photo-heading">Заголовок <span class="form__input-required">*</span></label>
-                                        <div class="form__input-section">
-                                            <input class="adding-post__input form__input" id="photo-heading" type="text" name="photo-heading" placeholder="Введите заголовок">
-                                            <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
-                                            <div class="form__error-text">
-                                                <h3 class="form__error-title">Заголовок сообщения</h3>
-                                                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <?php include('title-input.php');?>
                                     <div class="adding-post__input-wrapper form__input-wrapper">
                                         <label class="adding-post__label form__label" for="photo-url">Ссылка из интернета</label>
                                         <div class="form__input-section">
@@ -166,17 +110,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="adding-post__input-wrapper form__input-wrapper">
-                                        <label class="adding-post__label form__label" for="photo-tags">Теги</label>
-                                        <div class="form__input-section">
-                                            <input class="adding-post__input form__input" id="photo-tags" type="text" name="photo-heading" placeholder="Введите теги">
-                                            <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
-                                            <div class="form__error-text">
-                                                <h3 class="form__error-title">Заголовок сообщения</h3>
-                                                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <?php include('tags-input.php');?>
                                 </div>
                                 <div class="form__invalid-block">
                                     <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
@@ -204,10 +138,7 @@
 
                                 </div>
                             </div>
-                            <div class="adding-post__buttons">
-                                <button class="adding-post__submit button button--main" type="submit">Опубликовать</button>
-                                <a class="adding-post__close" href="#">Закрыть</a>
-                            </div>
+                            <?php include('submit.php');?>
                         </form>
                     </section>
 
@@ -216,17 +147,7 @@
                         <form class="adding-post__form form" action="#" method="post" enctype="multipart/form-data">
                             <div class="form__text-inputs-wrapper">
                                 <div class="form__text-inputs">
-                                    <div class="adding-post__input-wrapper form__input-wrapper">
-                                        <label class="adding-post__label form__label" for="video-heading">Заголовок <span class="form__input-required">*</span></label>
-                                        <div class="form__input-section">
-                                            <input class="adding-post__input form__input" id="video-heading" type="text" name="video-heading" placeholder="Введите заголовок">
-                                            <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
-                                            <div class="form__error-text">
-                                                <h3 class="form__error-title">Заголовок сообщения</h3>
-                                                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <?php include('title-input.php');?>
                                     <div class="adding-post__input-wrapper form__input-wrapper">
                                         <label class="adding-post__label form__label" for="video-url">Ссылка youtube <span class="form__input-required">*</span></label>
                                         <div class="form__input-section">
@@ -238,17 +159,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="adding-post__input-wrapper form__input-wrapper">
-                                        <label class="adding-post__label form__label" for="video-tags">Теги</label>
-                                        <div class="form__input-section">
-                                            <input class="adding-post__input form__input" id="video-tags" type="text" name="photo-heading" placeholder="Введите ссылку">
-                                            <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
-                                            <div class="form__error-text">
-                                                <h3 class="form__error-title">Заголовок сообщения</h3>
-                                                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <?php include('tags-input.php');?>
                                 </div>
                                 <div class="form__invalid-block">
                                     <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
@@ -257,11 +168,7 @@
                                     </ul>
                                 </div>
                             </div>
-
-                            <div class="adding-post__buttons">
-                                <button class="adding-post__submit button button--main" type="submit">Опубликовать</button>
-                                <a class="adding-post__close" href="#">Закрыть</a>
-                            </div>
+                            <?php include('submit.php');?>
                         </form>
                     </section>
 
@@ -270,17 +177,7 @@
                         <form class="adding-post__form form" action="#" method="post">
                             <div class="form__text-inputs-wrapper">
                                 <div class="form__text-inputs">
-                                    <div class="adding-post__input-wrapper form__input-wrapper">
-                                        <label class="adding-post__label form__label" for="link-heading">Заголовок <span class="form__input-required">*</span></label>
-                                        <div class="form__input-section">
-                                            <input class="adding-post__input form__input" id="link-heading" type="text" name="link-heading" placeholder="Введите заголовок">
-                                            <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
-                                            <div class="form__error-text">
-                                                <h3 class="form__error-title">Заголовок сообщения</h3>
-                                                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <?php include('title-input.php');?>
                                     <div class="adding-post__textarea-wrapper form__input-wrapper">
                                         <label class="adding-post__label form__label" for="post-link">Ссылка <span class="form__input-required">*</span></label>
                                         <div class="form__input-section">
@@ -292,17 +189,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="adding-post__input-wrapper form__input-wrapper">
-                                        <label class="adding-post__label form__label" for="link-tags">Теги</label>
-                                        <div class="form__input-section">
-                                            <input class="adding-post__input form__input" id="link-tags" type="text" name="photo-heading" placeholder="Введите ссылку">
-                                            <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
-                                            <div class="form__error-text">
-                                                <h3 class="form__error-title">Заголовок сообщения</h3>
-                                                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <?php include('tags-input.php');?>
                                 </div>
                                 <div class="form__invalid-block">
                                     <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
@@ -312,10 +199,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="adding-post__buttons">
-                                <button class="adding-post__submit button button--main" type="submit">Опубликовать</button>
-                                <a class="adding-post__close" href="#">Закрыть</a>
-                            </div>
+                            <?php include('submit.php');?>
                         </form>
                     </section>
                 </div>
