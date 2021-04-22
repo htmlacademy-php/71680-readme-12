@@ -15,15 +15,25 @@ function getTypeContent($mysqli)
     return $result;
 }
 
+$tabs = [
+    'text' => 'text',
+    'quote' => 'quote',
+    'photo' => 'photo',
+    'video' => 'video',
+    'link' => 'link'
+];
+
+$active_tab = isset($_POST['type-post']) ? $tabs[$_POST['type-post']] : $tabs['text'];
+
 $mysqli = connect();
 $type_content = getTypeContent($mysqli);
 
-$content = include_template('adding-post.php', ['types' => $type_content]);
+$content = include_template('adding-post.php', ['types' => $type_content, 'active_tab' => $active_tab]);
 
 $data = [
     'content' => $content,
-    'user_name' => 'Alex',
     'is_auth' => 1,
+    'user_name' => 'Alex',
     'page_name' => 'Добавить пост'
 ];
 
