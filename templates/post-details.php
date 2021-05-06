@@ -6,7 +6,7 @@
             <div class="post-details__wrapper post-<?= $info['post_type']; ?>">
                 <div class="post-details__main-block post post--details">
                     <?php if (isset($post)) : ?>
-                        <?= $post; ?>
+                        <?=$post; ?>
                     <?php endif; ?>
                     <div class="post__indicators">
                         <div class="post__buttons">

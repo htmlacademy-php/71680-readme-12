@@ -1,10 +1,8 @@
 <?php
-
 define("HOST", 'localhost');
 define("USER", 'root');
 define("PASSWORD", '');
 define("DATABASE", 'readme');
-
 /**
  * Функция для соединения с базой данных
  * @return object возвращает ресурс соединения, либо false если соединение неудалось

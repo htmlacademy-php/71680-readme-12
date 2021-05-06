@@ -32,7 +32,7 @@ CREATE TABLE posts (
   image_url TINYTEXT,
   video_url TINYTEXT,
   link TINYTEXT,
-  view_number INT,
+  view_number INT DEFAULT 0,
   user_id INT,
   type_id INT,
   FOREIGN KEY (user_id) REFERENCES users (id),
