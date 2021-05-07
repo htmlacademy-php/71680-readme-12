@@ -33,6 +33,21 @@ class Post {
         return $result;
     }
 
+    public function getHashtags()
+    {
+        $stmt = $this->mysqli->prepare("
+            SELECT h.hashtag, ph.hashtag_id
+            FROM hashtags h
+            JOIN posts_hashtags ph ON ph.hashtag_id = h.id
+            WHERE ph.post_id = ?
+        ");
+        $stmt->bind_param('i', $this->id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $result = $result->fetch_all(MYSQLI_ASSOC);
+        return $result;
+    }
+
     private function setAuthorId($id) {
         $this->author_id = $id;
     }

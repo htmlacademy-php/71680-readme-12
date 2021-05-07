@@ -38,6 +38,23 @@ $rules = [
     }
 ];
 
+function addHashTags($mysqli, $post_id, $tags)
+{
+    if (empty($tags)) {
+        return;
+    }
+    $tags = str_word_count($tags, 1, 'АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя');
+    foreach ($tags as $tag) {
+        $stmt = $mysqli->prepare("INSERT INTO hashtags (hashtag) VALUES (?);");
+        $stmt->bind_param('s', $tag);
+        $stmt->execute();
+        $hashtag_id = $mysqli->insert_id;
+        $stmt = $mysqli->prepare("INSERT INTO posts_hashtags (post_id, hashtag_id) VALUES (?, ?);");
+        $stmt->bind_param('is', $post_id, $hashtag_id);
+        $stmt->execute();
+    }
+}
+
 function addTextPost($mysqli, $data)
 {
     $stmt = $mysqli->prepare("INSERT INTO posts (title, text_content, user_id, type_id) VALUES (?,?,?,1);");
@@ -47,6 +64,7 @@ function addTextPost($mysqli, $data)
     $stmt->bind_param('ssi', $title, $content, $user);
     $stmt->execute();
     $id = $mysqli->insert_id;
+    addHashTags($mysqli, $id, $data['tags']);
     header("Location: post.php?id={$id}");
 }
 
@@ -60,6 +78,7 @@ function addQuotePost($mysqli, $data)
     $stmt->bind_param('sssi', $title, $content, $author, $user);
     $stmt->execute();
     $id = $mysqli->insert_id;
+    addHashTags($mysqli, $id, $data['tags']);
     header("Location: post.php?id={$id}");
 }
 
@@ -74,6 +93,7 @@ function addVideoPost ($mysqli, $data)
     $stmt->bind_param('ssi', $title, $video, $user);
     $stmt->execute();
     $id = $mysqli->insert_id;
+    addHashTags($mysqli, $id, $data['tags']);
     header("Location: post.php?id={$id}");
 }
 
@@ -86,6 +106,7 @@ function addLinkPost ($mysqli, $data)
     $stmt->bind_param('ssi', $title, $link, $user);
     $stmt->execute();
     $id = $mysqli->insert_id;
+    addHashTags($mysqli, $id, $data['tags']);
     header("Location: post.php?id={$id}");
 }
 

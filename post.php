@@ -36,6 +36,7 @@ function getCountViews($count)
 $mysqli = connect();
 $post = new Post($_GET['id'], $mysqli);
 $data = $post->getPostContent();
+$tags = $post->getHashtags();
 
 if (empty($data)) {
     header("HTTP/1.0 404 Not Found");
@@ -56,6 +57,7 @@ $post = include_template($template, ['post' => $safe_data]);
 $post_details = include_template('post-details.php',
     [
         'post' => $post,
+        'tags' => $tags,
         'info' => $safe_data,
         'comments' => $comments,
         'comments_count' => $comments_count,
