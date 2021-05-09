@@ -95,7 +95,7 @@
 
                     <?php if ($post['post_type'] === 'photo') :?>
                         <div class="post-photo__image-wrapper">
-                            <img src="img/<?=$post['image_url']; ?>" alt="Фото от пользователя" width="360" height="240">
+                            <img src="<?=$post['image_url']; ?>" alt="Фото от пользователя" width="360" height="240">
                         </div>
                     <?php endif; ?>
 

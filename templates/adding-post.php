@@ -63,12 +63,12 @@
                                     <?php include('title-input.php');?>
                                     <div class="adding-post__input-wrapper form__textarea-wrapper">
                                         <label class="adding-post__label form__label" for="cite-text">Текст цитаты <span class="form__input-required">*</span></label>
-                                        <div class="form__input-section <?=isset($errors['quote-text']) ? 'form__input-section--error' : '';?>">
-                                            <textarea class="adding-post__textarea adding-post__textarea--quote form__textarea form__input" id="cite-text" placeholder="Текст цитаты" name="quote-text"><?=$data['quote-text'] ?? '';?></textarea>
+                                        <div class="form__input-section <?=isset($errors['post-text']) ? 'form__input-section--error' : '';?>">
+                                            <textarea class="adding-post__textarea adding-post__textarea--quote form__textarea form__input" id="cite-text" placeholder="Текст цитаты" name="post-text"><?=$data['post-text'] ?? '';?></textarea>
                                             <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                                             <div class="form__error-text">
                                                 <h3 class="form__error-title">Ошибка</h3>
-                                                <p class="form__error-desc"><?=$errors['quote-text'] ?? '';?></p>
+                                                <p class="form__error-desc"><?=$errors['post-text'] ?? '';?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -110,7 +110,7 @@
                                     <div class="adding-post__input-wrapper form__input-wrapper">
                                         <label class="adding-post__label form__label" for="photo-url">Ссылка из интернета</label>
                                         <div class="form__input-section">
-                                            <input class="adding-post__input form__input" id="photo-url" type="text" name="photo-link" placeholder="Введите ссылку">
+                                            <input class="adding-post__input form__input" id="photo-url" type="text" name="photo-link" placeholder="Введите ссылку" value="<?=$data['photo-link'] ?? '';?>">
                                             <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                                             <div class="form__error-text">
                                                 <h3 class="form__error-title">Заголовок сообщения</h3>
