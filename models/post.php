@@ -6,7 +6,7 @@ class Post {
     public $id;
     public $author_id;
 
-    public function __construct($id, $mysqli) {
+    public function __construct($mysqli, $id = null) {
         $this->id = $id;
         $this->mysqli = $mysqli;
     }

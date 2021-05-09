@@ -34,7 +34,7 @@ function getCountViews($count)
 }
 
 $mysqli = connect();
-$post = new Post($_GET['id'], $mysqli);
+$post = new Post($mysqli, $_GET['id']);
 $data = $post->getPostContent();
 $tags = $post->getHashtags();
 
