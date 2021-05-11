@@ -1,6 +1,7 @@
 <?php
 require('helpers.php');
 require('utils.php');
+require('models/TypeContent.php');
 define('VALID_FORMAT', ['png', 'jpeg', 'gif']);
 define('UPLOAD_DIRECTORY',  __DIR__."/uploads/");
 
@@ -16,19 +17,6 @@ define('TABLE_FIELDS',
         'type_id'
     ]
 );
-
-/**
- * Получает тип контента из базы данных
- * @param object ресурс соединения с базой данных
- * @return array массив типов постов
- */
-function getTypeContent($mysqli)
-{
-    $sql = "SELECT * FROM type_contents";
-    $result = $mysqli->query($sql);
-    $result = $result->fetch_all(MYSQLI_ASSOC);
-    return $result;
-}
 
 function getTypeIdPost($type)
 {
@@ -195,7 +183,7 @@ $rules = [
 ];
 
 $mysqli = connect();
-$type_content = getTypeContent($mysqli);
+$type_content = (new ($mysqli))->getAll();
 
 if (isset($_FILES['file-photo']) && is_uploaded_file($_FILES['file-photo']['tmp_name'])) {
     $_POST['file-photo'] = $_FILES['file-photo'];

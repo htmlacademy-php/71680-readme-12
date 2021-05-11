@@ -3,80 +3,11 @@ date_default_timezone_set('Asia/Omsk');
 require('helpers.php');
 require('utils.php');
 
+require('models/Post.php');
+require('models/TypeContent.php');
+
 $is_auth = rand(0, 1);
 $user_name = 'Александр';
-
-/**
- * Получает тип контента из базы данных
- * @param object ресурс соединения с базой данных
- * @return array массив типов постов
- */
-function getTypeContent($mysqli)
-{
-    $sql = "SELECT * FROM type_contents";
-    $result = $mysqli->query($sql);
-    $result = $result->fetch_all(MYSQLI_ASSOC);
-    return $result;
-}
-
-/**
- * Получает первые 6 популярных постов
- * @param object ресурс соединения с базой данных
- * @return array массив популярных постов
- */
-function getPopularPosts($mysqli)
-{
-    $sql= "
-        SELECT
-        p.id,
-        date_create,
-        title,
-        text_content,
-        quote_author,
-        image_url,
-        video_url,
-        link,
-        avatar_url,
-        view_number,
-        u.login,
-        tc.name_icon as post_type
-        FROM posts p
-        JOIN users u ON p.user_id = u.id
-        JOIN type_contents tc ON p.type_id = tc.id
-        ORDER BY view_number DESC LIMIT 6
-    ";
-    $result = $mysqli->query($sql);
-    return $result->fetch_all(MYSQLI_ASSOC);
-}
-
-function getPostByType($mysqli)
-{
-    $type = $_GET['type'];
-    $stmt = $mysqli->prepare("
-        SELECT
-        p.id,
-        date_create,
-        title,
-        text_content,
-        quote_author,
-        image_url,
-        video_url,
-        link,
-        avatar_url,
-        view_number,
-        u.login,
-        tc.name_icon as post_type
-        FROM posts p
-        JOIN users u ON p.user_id = u.id
-        JOIN type_contents tc ON p.type_id = tc.id
-        WHERE tc.id = ?
-        ORDER BY view_number DESC LIMIT 6
-    ");
-    $stmt->bind_param('i', $type);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    return $result->fetch_all(MYSQLI_ASSOC);
-}
 
 /**
  * Подключается к базе данных и запрашивает данные
@@ -90,12 +21,15 @@ function getData()
         return;
     }
 
+    $postModel = new Post($conn);
+    $typeContentsModel = new TypeContent($conn);
+
     if (isset($_GET['type'])) {
-        $post = getPostByType($conn);
+        $post = $postModel->getPostByType($_GET['type']);
     } else {
-        $post = getPopularPosts($conn);
+        $post = $postModel->getPopularPosts($conn);
     }
-    $content_types = getTypeContent($conn);
+    $content_types = $typeContentsModel->getAll();
     return [$content_types, $post];
 }
 
