@@ -1,7 +1,7 @@
 <?php
 require('helpers.php');
 require('utils.php');
-require('models/post.php');
+require('models/Post.php');
 
 if (empty($_GET['id'])) {
     header("HTTP/1.0 404 Not Found");
