@@ -86,12 +86,40 @@ class Post extends Model {
         return $result;
     }
 
+    function addPost($mysqli, $data)
+    {
+        $stmt = $mysqli->prepare("
+            INSERT INTO posts (title, text_content, quote_author, image_url, video_url, link, user_id, type_id)
+            VALUES (?,?,?,?,?,?,?,?)
+        ");
+        $title = $data['post-title'] ?? null;
+        $text_content = $data['post-text'] ?? null;
+        $quote_author = $data['quote-author'] ?? null;
+        $image_url = $data['image_url'] ?? null;
+        $video_url = $data['video-url'] ?? null;
+        $link = isset($data['post-link']) ? str_replace( parse_url( $data['post-link'], PHP_URL_SCHEME ) . '://', '', $data['post-link']) : null;
+        $user = mt_rand(1, 3);
+        $type_id = getTypeIdPost($data['type-post']);
+        $stmt->bind_param('ssssssii', $title, $text_content, $quote_author, $image_url, $video_url, $link, $user, $type_id);
+        $stmt->execute();
+        $id = $mysqli->insert_id;
+        addHashTags($mysqli, $id, $data['tags']);
+        header("Location: post.php?id={$id}");
+    }
+
     public function getId() {
         return $this->id;
     }
 
     private function setAuthorId($id) {
         $this->author_id = $id;
+    }
+
+    private function setId($id)
+    {
+        if (!isset($this->id)) {
+            $this->id = $id;
+        }
     }
 
     private function getAuthorPublicationsCount()

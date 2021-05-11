@@ -1,7 +1,10 @@
 <?php
 require('helpers.php');
 require('utils.php');
+
+require('models/Post.php');
 require('models/TypeContent.php');
+
 define('VALID_FORMAT', ['png', 'jpeg', 'gif']);
 define('UPLOAD_DIRECTORY',  __DIR__."/uploads/");
 
@@ -183,7 +186,7 @@ $rules = [
 ];
 
 $mysqli = connect();
-$type_content = (new ($mysqli))->getAll();
+$type_content = (new TypeContent($mysqli))->getAll();
 
 if (isset($_FILES['file-photo']) && is_uploaded_file($_FILES['file-photo']['tmp_name'])) {
     $_POST['file-photo'] = $_FILES['file-photo'];
