@@ -21,6 +21,24 @@ class Hashtag extends Model {
         $result = $result->fetch_all(MYSQLI_ASSOC);
         return $result;
     }
+
+    public function addHashTags(Post $post, $tags)
+    {
+        if (empty($tags)) {
+            return;
+        }
+        $id = $post->getId();
+        $tags = str_word_count($tags, 1, 'АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя');
+        foreach ($tags as $tag) {
+            $stmt = $this->mysqli->prepare("INSERT INTO {$this->table} (hashtag) VALUES (?);");
+            $stmt->bind_param('s', $tag);
+            $stmt->execute();
+            $hashtag_id = $this->mysqli->insert_id;
+            $stmt = $this->mysqli->prepare("INSERT INTO posts_hashtags (post_id, hashtag_id) VALUES (?, ?);");
+            $stmt->bind_param('is', $id, $hashtag_id);
+            $stmt->execute();
+        }
+    }
 }
 
 ?>

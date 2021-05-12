@@ -3,23 +3,19 @@ require('helpers.php');
 require('utils.php');
 
 require('models/Post.php');
+require('models/Hashtag.php');
 require('models/TypeContent.php');
 
 define('VALID_FORMAT', ['png', 'jpeg', 'gif']);
 define('UPLOAD_DIRECTORY',  __DIR__."/uploads/");
+define('ERRORS', []);
 
-define('TABLE_FIELDS',
-    [
-        'title',
-        'text_content',
-        'quote_author',
-        'image_url',
-        'video_url',
-        'link',
-        'user_id',
-        'type_id'
-    ]
-);
+function addError($key, $error)
+{
+    if (!isset(ERRORS[$key])) {
+        ERRORS[$key] = $error;
+    }
+}
 
 function getTypeIdPost($type)
 {
@@ -34,44 +30,6 @@ function getTypeIdPost($type)
             return 4;
         case 'link':
             return 5;
-    }
-}
-
-function addPost($mysqli, $data)
-{
-    $stmt = $mysqli->prepare("
-        INSERT INTO posts (title, text_content, quote_author, image_url, video_url, link, user_id, type_id)
-        VALUES (?,?,?,?,?,?,?,?)
-    ");
-    $title = $data['post-title'] ?? null;
-    $text_content = $data['post-text'] ?? null;
-    $quote_author = $data['quote-author'] ?? null;
-    $image_url = $data['image_url'] ?? null;
-    $video_url = $data['video-url'] ?? null;
-    $link = isset($data['post-link']) ? str_replace( parse_url( $data['post-link'], PHP_URL_SCHEME ) . '://', '', $data['post-link']) : null;
-    $user = mt_rand(1, 3);
-    $type_id = getTypeIdPost($data['type-post']);
-    $stmt->bind_param('ssssssii', $title, $text_content, $quote_author, $image_url, $video_url, $link, $user, $type_id);
-    $stmt->execute();
-    $id = $mysqli->insert_id;
-    addHashTags($mysqli, $id, $data['tags']);
-    header("Location: post.php?id={$id}");
-}
-
-function addHashTags($mysqli, $post_id, $tags)
-{
-    if (empty($tags)) {
-        return;
-    }
-    $tags = str_word_count($tags, 1, 'АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя');
-    foreach ($tags as $tag) {
-        $stmt = $mysqli->prepare("INSERT INTO hashtags (hashtag) VALUES (?);");
-        $stmt->bind_param('s', $tag);
-        $stmt->execute();
-        $hashtag_id = $mysqli->insert_id;
-        $stmt = $mysqli->prepare("INSERT INTO posts_hashtags (post_id, hashtag_id) VALUES (?, ?);");
-        $stmt->bind_param('is', $post_id, $hashtag_id);
-        $stmt->execute();
     }
 }
 
@@ -192,7 +150,6 @@ if (isset($_FILES['file-photo']) && is_uploaded_file($_FILES['file-photo']['tmp_
     $_POST['file-photo'] = $_FILES['file-photo'];
 }
 
-$errors = Array();
 if (isset($_POST['submit'])) {
 
     foreach ($_POST as $key => $value) {
@@ -207,7 +164,9 @@ if (isset($_POST['submit'])) {
     }
 
     if (empty($errors)) {
-        addPost($mysqli, $_POST);
+        $post = new Post($mysqli);
+        $hashtag = new Hashtag($mysqli);
+        $post->addPost($_POST, $hashtag);
     }
 }
 

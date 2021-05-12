@@ -86,10 +86,10 @@ class Post extends Model {
         return $result;
     }
 
-    function addPost($mysqli, $data)
+    function addPost(array $data, Hashtag $hashtag)
     {
-        $stmt = $mysqli->prepare("
-            INSERT INTO posts (title, text_content, quote_author, image_url, video_url, link, user_id, type_id)
+        $stmt = $this->mysqli->prepare("
+            INSERT INTO {$this->table} (title, text_content, quote_author, image_url, video_url, link, user_id, type_id)
             VALUES (?,?,?,?,?,?,?,?)
         ");
         $title = $data['post-title'] ?? null;
@@ -102,8 +102,9 @@ class Post extends Model {
         $type_id = getTypeIdPost($data['type-post']);
         $stmt->bind_param('ssssssii', $title, $text_content, $quote_author, $image_url, $video_url, $link, $user, $type_id);
         $stmt->execute();
-        $id = $mysqli->insert_id;
-        addHashTags($mysqli, $id, $data['tags']);
+        $id = $this->mysqli->insert_id;
+        $this->setId($id);
+        $hashtag->addHashTags($this, $data['tags']);
         header("Location: post.php?id={$id}");
     }
 
