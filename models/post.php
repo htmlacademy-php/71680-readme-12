@@ -99,7 +99,7 @@ class Post extends Model {
         $video_url = $data['video-url'] ?? null;
         $link = isset($data['post-link']) ? str_replace( parse_url( $data['post-link'], PHP_URL_SCHEME ) . '://', '', $data['post-link']) : null;
         $user = mt_rand(1, 3);
-        $type_id = getTypeIdPost($data['type-post']);
+        $type_id = $this->getTypeIdPost($data['type-post']);
         $stmt->bind_param('ssssssii', $title, $text_content, $quote_author, $image_url, $video_url, $link, $user, $type_id);
         $stmt->execute();
         $id = $this->mysqli->insert_id;
@@ -114,6 +114,22 @@ class Post extends Model {
 
     private function setAuthorId($id) {
         $this->author_id = $id;
+    }
+
+    private function getTypeIdPost($type)
+    {
+        switch($type) {
+            case 'text':
+                return 1;
+            case 'quote':
+                return 2;
+            case 'photo':
+                return 3;
+            case 'video':
+                return 4;
+            case 'link':
+                return 5;
+        }
     }
 
     private function setId($id)

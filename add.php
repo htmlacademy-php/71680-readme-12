@@ -8,30 +8,6 @@ require('models/TypeContent.php');
 
 define('VALID_FORMAT', ['png', 'jpeg', 'gif']);
 define('UPLOAD_DIRECTORY',  __DIR__."/uploads/");
-define('ERRORS', []);
-
-function addError($key, $error)
-{
-    if (!isset(ERRORS[$key])) {
-        ERRORS[$key] = $error;
-    }
-}
-
-function getTypeIdPost($type)
-{
-    switch($type) {
-        case 'text':
-            return 1;
-        case 'quote':
-            return 2;
-        case 'photo':
-            return 3;
-        case 'video':
-            return 4;
-        case 'link':
-            return 5;
-    }
-}
 
 function validateFilled($field_name, $name = '') {
     if (empty($_POST[$field_name])) {
@@ -94,7 +70,9 @@ function validatePhotoLink($field_name) {
     }
 
     $file_name = uniqid();
-    file_put_contents(UPLOAD_DIRECTORY."{$file_name}.{$mime_type}", $file);
+    if (file_put_contents(UPLOAD_DIRECTORY."{$file_name}.{$mime_type}", $file) === false) {
+        return 'Не удалось загрузить файл';
+    }
     $_POST['image_url'] = 'uploads/'."{$file_name}.{$mime_type}";
 }
 
@@ -153,7 +131,6 @@ if (isset($_FILES['file-photo']) && is_uploaded_file($_FILES['file-photo']['tmp_
 if (isset($_POST['submit'])) {
 
     foreach ($_POST as $key => $value) {
-
         if (isset($rules[$key])) {
             $rule = $rules[$key];
             $errors[$key] = $rule();
@@ -197,5 +174,4 @@ $data = [
 ];
 
 print_r(include_template('layout.php', $data));
-
 ?>
