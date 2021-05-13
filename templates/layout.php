@@ -110,9 +110,7 @@
         </div>
     </div>
 </header>
-<section class="page__main page__main--popular">
     <?=$content;?>
-</section>
 <footer class="footer">
     <div class="footer__wrapper">
         <div class="footer__container container">
@@ -168,7 +166,7 @@
     </div>
 </footer>
 <script src="libs/dropzone.js"></script>
-<script src="js/dropzone-settings.js"></script>
+<!--<script src="js/dropzone-settings.js"></script>-->
 <script src="js/main.js"></script>
 </body>
 </html>

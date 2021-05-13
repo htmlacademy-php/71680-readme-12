@@ -6,7 +6,7 @@
             <div class="post-details__wrapper post-<?= $info['post_type']; ?>">
                 <div class="post-details__main-block post post--details">
                     <?php if (isset($post)) : ?>
-                        <?= $post; ?>
+                        <?=$post; ?>
                     <?php endif; ?>
                     <div class="post__indicators">
                         <div class="post__buttons">
@@ -37,14 +37,13 @@
                         </div>
                         <span class="post__view"><?=$info['view_number'];?></span>
                     </div>
-                    <ul class="post__tags">
-                        <li><a href="#">#nature</a></li>
-                        <li><a href="#">#globe</a></li>
-                        <li><a href="#">#photooftheday</a></li>
-                        <li><a href="#">#canon</a></li>
-                        <li><a href="#">#landscape</a></li>
-                        <li><a href="#">#щикарныйвид</a></li>
-                    </ul>
+                    <?php if (!empty($tags)) :?>
+                        <ul class="post__tags">
+                            <?php foreach ($tags as $tag) :?>
+                                <li><a href="#">#<?=$tag['hashtag']?></a></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php endif; ?>
                     <div class="comments">
                         <form class="comments__form form" action="#" method="post">
                             <div class="comments__my-avatar">

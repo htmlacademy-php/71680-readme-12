@@ -1,7 +1,11 @@
 <?php
 require('helpers.php');
 require('utils.php');
-require('models/post.php');
+
+require('models/Post.php');
+require('models/Hashtag.php');
+require('models/Comment.php');
+require('models/Like.php');
 
 if (empty($_GET['id'])) {
     header("HTTP/1.0 404 Not Found");
@@ -34,20 +38,23 @@ function getCountViews($count)
 }
 
 $mysqli = connect();
-$post = new Post($_GET['id'], $mysqli);
+$post = new Post($mysqli, $_GET['id']);
 $data = $post->getPostContent();
+
 
 if (empty($data)) {
     header("HTTP/1.0 404 Not Found");
     return;
 }
 
-$template = $templates[$data->post_type];
-$safe_data = prepearingPost($data);
-$comments = $post->getPostComments();
+$tags = (new Hashtag($mysqli))->getHashtags($post);
+$comments = (new Comment($mysqli))->getComments($post);
 $comments = addRelativeTime($comments);
 $comments_count = count($comments);
-$likes_count = $post->getCountPostLikes();
+$likes_count = (new Like($mysqli))->getCountLikes($post);
+
+$template = $templates[$data->post_type];
+$safe_data = prepearingPost($data);
 
 $safe_data['duration_on_site'] = getRelativeDate($safe_data['date_registration'], 'на сайте');
 $safe_data['view_number'] = getCountViews($safe_data['view_number']);
@@ -56,6 +63,7 @@ $post = include_template($template, ['post' => $safe_data]);
 $post_details = include_template('post-details.php',
     [
         'post' => $post,
+        'tags' => $tags,
         'info' => $safe_data,
         'comments' => $comments,
         'comments_count' => $comments_count,
